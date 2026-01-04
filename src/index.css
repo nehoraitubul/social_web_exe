@@ -1,0 +1,43 @@
+:root {
+  /* צבעים (נשאר אותו דבר) */
+  --bg-app: #161022;
+  --bg-surface: #1f1a2e;
+  --primary: #5b13ec;
+  --text-main: #ffffff;
+  --text-muted: #9ca3af;
+  --border-color: #362f4b;
+  --radius: 40px;
+
+  /* === הגדרת הפונטים החדשים === */
+  /* פונט לכותרות (כמו Spline בקוד שלך) */
+  --font-display: 'Spline Sans', sans-serif;
+  /* פונט לטקסט רגיל (כמו Noto בקוד שלך) */
+  --font-body: 'Noto Sans', sans-serif;
+}
+
+body {
+  margin: 0;
+  /* שימוש בפונט הראשי (Body) כברירת מחדל */
+  font-family: var(--font-body);
+
+  background-color: var(--bg-app);
+  color: var(--text-main);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* הגדרה גורפת שכל הכותרות ישתמשו בפונט המיוחד */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  margin: 0; /* איפוס ברירת מחדל של הדפדפן */
+}
+
+/* גם כפתורים נראים טוב יותר עם הפונט של הכותרות */
+button {
+  font-family: var(--font-display);
+}
+
+* {
+  box-sizing: border-box;
+}
+

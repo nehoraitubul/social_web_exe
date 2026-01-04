@@ -1,0 +1,49 @@
+/* בסיס לכל הכפתורים */
+.btn {
+    height: 48px;
+    padding: 0 28px;
+    border-radius: var(--radius);
+    font-weight: 600; /* Semi-bold */
+    font-size: 16px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+    border: none; /* איפוס ברירת מחדל */
+    outline: none;
+}
+
+/* כפתור ראשי - סגול */
+.primary {
+    background-color: var(--primary);
+    color: white;
+    box-shadow: 0 4px 14px 0 rgba(91, 19, 236, 0.39);
+}
+
+.primary:hover {
+    transform: translateY(-2px);
+    background-color: #4c10c4; /* קצת יותר כהה במעבר */
+    box-shadow: 0 6px 20px rgba(91, 19, 236, 0.23);
+}
+
+/* כפתור משני - שקוף עם מסגרת (מותאם ל-Dark Mode) */
+.secondary {
+    background-color: transparent;
+    color: var(--text-main); /* טקסט לבן */
+    border: 1px solid var(--border-color); /* מסגרת כהה עדינה */
+}
+
+.secondary:hover {
+    background-color: rgba(255, 255, 255, 0.1); /* הבהרה עדינה ברקע */
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.btn:disabled {
+    opacity: 0.5;           /* הופך את הכפתור לחצי שקוף/דהוי */
+    cursor: not-allowed;    /* משנה את העכבר לסימן "אין כניסה" */
+    box-shadow: none;       /* מבטל את הצללית */
+    transform: none !important; /* מבטל את הקפיצה למעלה */
+    pointer-events: none;   /* מבטל לחיצות והוברים לגמרי */
+}

@@ -1,0 +1,65 @@
+/* העטיפה הראשית - נשארת דבוקה למעלה */
+.header {
+    position: sticky;
+    top: 0;
+    z-index: 1000; /* שיהיה מעל הכל */
+    width: 100%;
+    border-bottom: 1px solid var(--border-color);
+
+    /* אפקט הזכוכית */
+    background-color: rgba(31, 26, 46, 0.8); /* צבע רקע חצי שקוף */
+    backdrop-filter: blur(12px); /* הטשטוש מאחורה */
+}
+
+/* המיכל שמגביל את הרוחב ומסדר את התוכן */
+.container {
+    max-width: 1280px;
+    margin: 0 auto; /* ממכז באמצע */
+    padding: 0 24px;
+    height: 70px;   /* גובה ה-Navbar */
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* === לוגו === */
+.logoLink {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logoIcon {
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(135deg, var(--primary), #a855f7); /* מעבר צבעים סגול */
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.logoText {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-main);
+    letter-spacing: -0.5px;
+}
+
+/* === כפתורים בצד === */
+.actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+/* מבטל את הקו התחתון של הלינקים שעוטפים את הכפתורים */
+.linkWrapper {
+    text-decoration: none;
+}

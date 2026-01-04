@@ -1,0 +1,59 @@
+/* הקופסה הגדולה שעוטפת הכל */
+.hero {
+    display: flex;             /* מסדר את האלמנטים אחד ליד השני */
+    align-items: center;       /* ממכז אותם אנכית (שלא יהיו עקומים) */
+    justify-content: space-between; /* דוחף אותם לצדדים */
+    gap: 40px;                 /* רווח בין הטקסט לתמונה */
+    padding: 80px 20px;        /* רווח פנימי כדי שלא יידבק לקצוות */
+    max-width: 1200px;         /* רוחב מקסימלי לאתר */
+    margin: 0 auto;           /* ממכז את הקופסה כולה באמצע המסך */
+}
+
+/* צד שמאל - הטקסטים */
+.content {
+    flex: 1;                  /* תופס 50% מהמקום (או כמה שיש) */
+    display: flex;
+    flex-direction: column;   /* מסדר את הטקסטים אחד מתחת לשני */
+    gap: 24px;                /* רווח בין הכותרת לפסקה ולכפתורים */
+}
+
+.title {
+    font-size: 64px;       /* הגדלתי קצת */
+    font-weight: 700;      /* משקל כבד */
+    letter-spacing: -1px;  /* מצופף את האותיות למראה מודרני */
+    line-height: 1.1;
+    color: var(--text-main);
+    margin-bottom: 10px;   /* רווח קטן מתחת לכותרת */
+}
+/* טריק קטן לצבוע רק חלק מהטקסט בסגול */
+.highlight {
+    color: var(--primary);
+}
+
+.description {
+    font-size: 18px;
+    color: var(--text-muted); /* האפור שהגדרנו */
+    max-width: 500px;         /* שהשורה לא תהיה ארוכה מדי לקריאה */
+    line-height: 1.6;
+}
+
+.buttons {
+    display: flex;
+    gap: 16px;                /* רווח בין הכפתורים */
+    margin-top: 10px;
+}
+
+/* צד ימין - התמונה */
+.imageContainer {
+    flex: 1;                  /* תופס את החצי השני */
+    display: flex;
+    justify-content: center;
+}
+
+.heroImage {
+    width: 100%;              /* מתאים את עצמו לגודל המיכל */
+    max-width: 500px;         /* לא יותר מדי ענק */
+    border-radius: 20px;      /* פינות עגולות */
+    box-shadow: 0 20px 50px rgba(91, 19, 236, 0.2); /* צללית סגולה מגניבה */
+    border: 1px solid var(--border-color);
+}
