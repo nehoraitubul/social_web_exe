@@ -249,3 +249,40 @@
     color: var(--primary);
     background-color: rgba(0,0,0,0.05);
 }
+
+.errorMessage {
+    color: #ef4444;       /* אדום בהיר ומודרני */
+    font-size: 13px;      /* קטן יותר מהטקסט הרגיל */
+    margin-top: 6px;      /* רווח קטן מהאינפוט */
+    font-weight: 500;     /* טיפה מודגש לקריאות */
+    display: flex;
+    align-items: center;
+    gap: 4px;             /* רווח אם נרצה להוסיף אייקון בעתיד */
+    animation: fadeIn 0.3s ease; /* אפקט הופעה נחמד */
+}
+
+.errorAlert {
+    margin-top: 20px;
+    padding: 12px 16px;
+    background-color: rgba(239, 68, 68, 0.1); /* אדום שקוף מאוד */
+    border: 1px solid rgba(239, 68, 68, 0.2); /* מסגרת אדומה עדינה */
+    border-radius: 12px;
+
+    color: #fca5a5; /* טקסט אדום בהיר וקריא */
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px; /* רווח בין האייקון לטקסט */
+
+    animation: fadeIn 0.3s ease; /* הופעה חלקה */
+}
+
+/* אנימציה פשוטה כדי שההודעה לא "תקפוץ" בבום */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}

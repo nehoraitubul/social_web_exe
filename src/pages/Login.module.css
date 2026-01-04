@@ -1,0 +1,233 @@
+/* מעטפת ראשית */
+.pageWrapper {
+    min-height: calc(100vh - 70px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+}
+
+.container {
+    max-width: 1200px;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 40px;
+    min-height: 600px; /* גובה מינימלי כדי שייראה טוב */
+}
+
+/* בדסקטופ - חלוקה ל-2 */
+@media (min-width: 1024px) {
+    .container {
+        grid-template-columns: 1fr 1fr;
+        gap: 80px;
+    }
+}
+
+/* === צד שמאל: תמונה והירו === */
+.leftSide {
+    display: none;
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+@media (min-width: 1024px) {
+    .leftSide {
+        display: flex;
+    }
+}
+
+.heroImage {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("../assets/Shai_Gaben.png");
+    background-size: cover;
+    background-position: center;
+    transition: transform 0.7s ease;
+}
+
+/* אפקט כהה על התמונה כדי שהטקסט יבלוט */
+.heroOverlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, var(--bg-app) 0%, rgba(22, 16, 34, 0.4) 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 48px;
+}
+
+.heroTitle {
+    font-size: 36px;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 16px;
+    line-height: 1.1;
+}
+
+.heroText {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 18px;
+    max-width: 400px;
+}
+
+.accentLine {
+    width: 48px;
+    height: 4px;
+    background-color: var(--primary);
+    margin-bottom: 24px;
+}
+
+/* === צד ימין: טופס === */
+.rightSide {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 480px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.header {
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+@media (min-width: 1024px) {
+    .header {
+        text-align: left;
+    }
+}
+
+.title {
+    font-size: 48px;
+    font-weight: 800;
+    color: var(--text-main);
+    margin-bottom: 12px;
+    letter-spacing: -1px;
+}
+
+.subtitle {
+    color: var(--text-muted);
+    font-size: 18px;
+}
+
+/* === שדות הקלט === */
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.inputGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.labelRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 4px;
+}
+
+.label {
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-main);
+}
+
+.forgotLink {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--primary);
+    text-decoration: none;
+}
+
+.inputWrapper {
+    position: relative;
+    background-color: var(--bg-surface); /* צבע כהה יותר */
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    transition: all 0.2s;
+}
+
+.inputWrapper:focus-within {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(91, 19, 236, 0.3);
+}
+
+.input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: white;
+    font-size: 16px;
+    font-weight: 500;
+    height: 100%;
+}
+
+.inputIcon {
+    color: var(--text-muted);
+}
+
+.eyeBtn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    padding: 4px;
+}
+
+.eyeBtn:hover {
+    color: white;
+}
+
+/* === פוטר === */
+.footer {
+    margin-top: 32px;
+    text-align: center;
+    font-size: 14px;
+    color: var(--text-muted);
+}
+
+.link {
+    color: var(--primary);
+    font-weight: 700;
+    text-decoration: none;
+    margin-left: 5px;
+}
+
+.errorAlert {
+    margin-top: 20px;
+    padding: 12px 16px;
+    background-color: rgba(239, 68, 68, 0.1); /* אדום שקוף מאוד */
+    border: 1px solid rgba(239, 68, 68, 0.2); /* מסגרת אדומה עדינה */
+    border-radius: 12px;
+
+    color: #fca5a5; /* טקסט אדום בהיר וקריא */
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px; /* רווח בין האייקון לטקסט */
+
+    animation: fadeIn 0.3s ease; /* הופעה חלקה */
+}

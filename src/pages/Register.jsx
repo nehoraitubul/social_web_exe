@@ -1,8 +1,12 @@
 import Button from '../components/ui/Button';
 import styles from './Register.module.css';
-import { Link } from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import { useState } from "react";
 import axios from "axios";
+import {BASE_URL, REGISTER_ENDPOINT} from "../config/config.js"
+import aviaImg from '../assets/Avia_troll.png';
+import shaiImg from '../assets/Shai_troll.png';
+import menahemImg from '../assets/menahem_troll.png';
 
 const Register = () => {
     const [username, setUsername] = useState("");
@@ -14,6 +18,9 @@ const Register = () => {
     const [passwordInputType, setPasswordInputType] = useState("password")
     const [repeatPasswordVisibility, setRepeatPasswordVisibility] = useState("visibility_off")
     const [repeatPasswordInputType, setRepeatPasswordInputType] = useState("password")
+    const [errorCode, setErrorCode] = useState(null)
+
+    const navigate = useNavigate();
 
     const enableRegister =
         username.trim().length === 0 ||
@@ -23,7 +30,10 @@ const Register = () => {
         password !== confirmPassword;
 
     const registerRequest = () => {
-        axios.get("http://localhost:8080/add-user", {
+        axios.get(BASE_URL + REGISTER_ENDPOINT, {
+            headers: {
+                "ngrok-skip-browser-warning": "true"
+            },
             params: {
                 firstName: firstName,
                 lastName: lastName,
@@ -33,14 +43,15 @@ const Register = () => {
         })
             .then((res) => {
                 if (res.data.success) {
-                    alert("יופי")
+                    setTimeout(() => {
+                        navigate('/profile');
+                    }, 1000);
                 } else {
-                    alert("סוקה")
+                    setErrorCode(res.data.errorCode)
                 }
             })
             .catch((err) => {
                 console.error(err);
-                alert("שגיאת תקשורת");
             });
     }
 
@@ -71,6 +82,30 @@ const Register = () => {
         }
     }
 
+    const errorCodeMessage = () =>{
+        if(errorCode === 1000){
+            return "First name required."
+        }
+        if(errorCode === 1001){
+            return "Last name required."
+        }
+        if(errorCode === 1002){
+            return "Username required."
+        }
+        if(errorCode === 1003){
+            return "Password required."
+        }
+        if(errorCode === 1004){
+            return "Username taken, replace and try again."
+        }
+        if(errorCode === 1006){
+            return "Invalid password. Password must be at least 8 characters long and contain both uppercase and lowercase letters."
+        }
+        return "";
+    }
+
+    const isPasswordMatch = password !== confirmPassword;
+
     return (
         <div className={styles.pageWrapper}>
 
@@ -95,9 +130,9 @@ const Register = () => {
 
                     <div className={styles.socialProof}>
                         <div className={styles.avatars}>
-                            <img src="https://i.pravatar.cc/100?img=1" className={styles.avatar} alt="User" />
-                            <img src="https://i.pravatar.cc/100?img=2" className={styles.avatar} alt="User" />
-                            <img src="https://i.pravatar.cc/100?img=3" className={styles.avatar} alt="User" />
+                            <img src={aviaImg} className={styles.avatar} alt="Avia User" />
+                            <img src={shaiImg} className={styles.avatar} alt="Shai User" />
+                            <img src={menahemImg} className={styles.avatar} alt="Menahem User" />
                             <div className={styles.avatar} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '12px' }}>+2k</div>
                         </div>
                         <div className={styles.subtitle} style={{ fontSize: '14px' }}>Joined recently</div>
@@ -143,7 +178,7 @@ const Register = () => {
 
                                 {/* Last Name */}
                                 <div className={styles.inputGroup}>
-                                    <label className={styles.label}>First Name</label>
+                                    <label className={styles.label}>Last Name</label>
                                     <div className={styles.inputWrapper}>
                                         <input type="text"
                                                placeholder="Enter last name"
@@ -189,10 +224,10 @@ const Register = () => {
 
                                 {/* Verify Password */}
                                 <div className={styles.inputGroup}>
-                                    <label className={styles.label}>Password</label>
+                                    <label className={styles.label}>Confirm Password</label>
                                     <div className={styles.inputWrapper}>
                                         <input type={repeatPasswordInputType}
-                                               placeholder="Reapet your password"
+                                               placeholder="Confirm your password"
                                                className={styles.input}
                                                value={confirmPassword}
                                                onChange={(e) => setConfirmPassword(e.target.value)} />
@@ -202,6 +237,14 @@ const Register = () => {
                                                 onClick={handleRepeatPasswordVisibilityClick}>
                                             <span className="material-symbols-outlined">{repeatPasswordVisibility}</span>
                                         </button>
+                                    </div>
+                                    <div>
+                                        {isPasswordMatch && (password !== "" && confirmPassword !== "")&&
+                                            <label className={styles.errorMessage}>
+                                                <span className="material-symbols-outlined" style={{fontSize: '14px'}}>error</span>
+                                                Passwords do not match
+                                            </label>
+                                        }
                                     </div>
                                 </div>
 
@@ -216,6 +259,17 @@ const Register = () => {
                                         <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>arrow_forward</span>
                                     </Button>
                                 </div>
+
+                                <>
+                                    {errorCode != null && (
+                                        <div className={styles.errorAlert}>
+                                            <span className="material-symbols-outlined" style={{fontSize: '20px'}}>
+                                                error
+                                            </span>
+                                                                                {errorCodeMessage()}
+                                        </div>
+                                    )}
+                                </>
 
                             </form>
                         </div>
