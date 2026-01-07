@@ -1,0 +1,550 @@
+/* === משתנים וצבעים מה-Tailwind ששלחת === */
+:root {
+    --bg-app: #161022;       /* background-dark */
+    --bg-surface: #1e162e;   /* surface-dark */
+    --border-dark: #2f2348;  /* border-dark */
+    --primary: #5b13ec;
+    --primary-hover: #4a0bc4;
+    --text-main: #ffffff;
+    --text-muted: #9ca3af;   /* gray-400 */
+}
+
+.pageWrapper {
+    min-height: 100vh;
+    background-color: var(--bg-app);
+    display: flex;
+    justify-content: center;
+    padding: 32px 16px;
+}
+
+.container {
+    width: 100%;
+    max-width: 1440px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+@media (min-width: 1024px) {
+    .container {
+        flex-direction: row;
+    }
+}
+
+/* === צד שמאל: סרגל דביק === */
+.leftSidebar {
+    width: 100%;
+    flex-shrink: 0;
+}
+
+@media (min-width: 1024px) {
+    .leftSidebar {
+        width: 340px;
+    }
+}
+
+.stickyWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+@media (min-width: 1024px) {
+    .stickyWrapper {
+        position: sticky;
+        top: 96px; /* מרווח מלמעלה */
+    }
+}
+
+/* === כרטיס פרופיל ראשי === */
+.profileCard {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-dark);
+    border-radius: 16px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.cardDecoration {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 96px;
+    background: linear-gradient(to bottom right, rgba(91, 19, 236, 0.2), transparent);
+}
+
+.avatarContainer {
+    position: relative;
+    margin-top: 16px;
+    margin-bottom: 16px;
+    z-index: 10;
+}
+
+.avatar {
+    width: 128px;
+    height: 128px;
+    border-radius: 50%;
+    border: 4px solid var(--bg-surface); /* מסגרת בצבע הרקע */
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    object-fit: cover;
+}
+
+.onlineBadge {
+    position: absolute;
+    bottom: 4px; right: 4px;
+    width: 16px; height: 16px;
+    background-color: #22c55e;
+    border: 2px solid var(--bg-surface);
+    border-radius: 50%;
+    z-index: 20;
+}
+
+.userName {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-main);
+    line-height: 1.2;
+}
+
+.userHandle {
+    color: var(--primary);
+    font-weight: 500;
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+.userBio {
+    color: var(--text-muted);
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 24px;
+    padding: 0 8px;
+}
+
+/* כפתורי פעולה */
+.actionsRow {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+    margin-bottom: 24px;
+}
+
+.followBtn {
+    flex: 1;
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: background 0.2s;
+    box-shadow: 0 10px 15px -3px rgba(91, 19, 236, 0.2);
+}
+
+.followBtn:hover {
+    background-color: var(--primary-hover);
+}
+
+.messageBtn {
+    flex: 1;
+    background-color: #2f2348;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.messageBtn:hover {
+    background-color: #3d2e5e;
+}
+
+/* סטטיסטיקה */
+.statsGrid {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-top: 1px solid rgba(255,255,255,0.05);
+    padding-top: 16px;
+}
+
+.statItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-right: 1px solid rgba(255,255,255,0.05);
+}
+
+.statItem:last-child {
+    border-right: none;
+}
+
+.statNumber {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.statLabel {
+    font-size: 12px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* === כרטיס מידע (About) === */
+.infoCard {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-dark);
+    border-radius: 16px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.sectionTitle {
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+}
+
+.infoRow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #d1d5db; /* gray-300 */
+}
+
+.infoLink {
+    color: inherit;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.infoLink:hover {
+    color: var(--primary);
+    text-decoration: underline;
+}
+
+.mutualFriends {
+    margin-top: 8px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border-dark);
+}
+
+.avatarsGroup {
+    display: flex;
+    margin-top: 12px;
+}
+
+.friendAvatar {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    border: 2px solid var(--bg-surface);
+    margin-left: -8px;
+}
+
+.friendAvatar:first-child {
+    margin-left: 0;
+}
+
+.moreFriends {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background-color: #374151;
+    border: 2px solid var(--bg-surface);
+    margin-left: -8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    color: white;
+}
+
+/* === צד ימין: ה-Feed === */
+.feedSection {
+    flex: 1;
+    min-width: 0; /* מונע גלישה בתוך פלקס */
+}
+
+/* טאבים */
+.tabs {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-dark);
+    border-radius: 12px;
+    padding: 4px;
+    display: inline-flex;
+    margin-bottom: 24px;
+    width: 100%;
+}
+
+@media (min-width: 640px) {
+    .tabs {
+        width: auto;
+    }
+}
+
+.tabBtn {
+    flex: 1;
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    border: none;
+    background: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.activeTab {
+    background-color: var(--primary);
+    color: white;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.tabBtn:not(.activeTab):hover {
+    background-color: rgba(255,255,255,0.05);
+    color: white;
+}
+
+/* === פוסטים (Grid) === */
+.postsGrid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+}
+
+@media (min-width: 768px) {
+    .postsGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.postCard {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-dark);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.3s;
+    display: flex;
+    flex-direction: column;
+}
+
+.postCard:hover {
+    border-color: rgba(91, 19, 236, 0.3);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+}
+
+.spanTwo {
+    grid-column: span 1;
+}
+
+@media (min-width: 768px) {
+    .spanTwo {
+        grid-column: span 2;
+    }
+}
+
+/* כותרת פוסט */
+.postHeader {
+    padding: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.authorInfo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.authorAvatar {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.authorName {
+    font-size: 14px;
+    font-weight: 700;
+    color: white;
+    margin: 0;
+}
+
+.postTime {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.moreBtn {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+}
+
+.moreBtn:hover {
+    color: white;
+}
+
+/* תוכן פוסט */
+.postText {
+    padding: 0 16px 12px 16px;
+    font-size: 14px;
+    color: #d1d5db; /* gray-300 */
+    line-height: 1.5;
+}
+
+.postImageContainer {
+    width: 100%;
+    height: 256px;
+    background-color: #1f2937;
+    overflow: hidden;
+}
+
+.postImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s;
+}
+
+.postCard:hover .postImage {
+    transform: scale(1.05);
+}
+
+/* פוסט ציטוט */
+.quoteContainer {
+    padding: 24px;
+    margin: 0 16px 8px 16px;
+    background: linear-gradient(to bottom right, rgba(99, 102, 241, 0.1), rgba(168, 85, 247, 0.1));
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+}
+
+.quoteText {
+    font-size: 18px;
+    font-weight: 500;
+    color: #e5e7eb;
+    font-style: italic;
+    text-align: center;
+}
+
+.quoteAuthor {
+    text-align: center;
+    font-size: 12px;
+    color: var(--primary);
+    font-weight: 700;
+    text-transform: uppercase;
+    padding-bottom: 8px;
+}
+
+/* פוסט פרויקט (רחב) */
+.projectLayout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 0 16px 16px 16px;
+}
+
+@media (min-width: 640px) {
+    .projectLayout {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.projectImageWrapper {
+    height: 256px;
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+}
+
+.projectTitle {
+    font-size: 20px;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 8px;
+}
+
+.projectTags {
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+}
+
+.tag {
+    background-color: #2f2348;
+    color: #d1d5db;
+    font-size: 12px;
+    padding: 4px 12px;
+    border-radius: 20px;
+}
+
+/* פוסט גלריה */
+.galleryGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    height: 256px;
+    width: 100%;
+}
+
+/* פוטר פוסט */
+.postFooter {
+    padding: 16px;
+    border-top: 1px solid var(--border-dark);
+    display: flex;
+    justify-content: space-between;
+    margin-top: auto; /* דוחף למטה אם יש מקום */
+}
+
+.interactions {
+    display: flex;
+    gap: 16px;
+}
+
+.actionBtn {
+    background: none;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text-muted);
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.actionBtn:hover {
+    color: var(--primary);
+}
+
+.likeBtn:hover {
+    color: #ec4899; /* Pink */
+}

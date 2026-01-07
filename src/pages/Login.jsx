@@ -1,9 +1,9 @@
-import { Link } from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import Button from '../components/ui/Button';
 import styles from './Login.module.css';
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import axios from "axios";
-import {BASE_URL, LOGIN_ENDPOINT} from "../config/config.js";
+import {BASE_URL, LOGIN_ENDPOINT, PROFILE_ENDPOINT} from "../config/config.js";
 
 const Login = () => {
 
@@ -12,12 +12,19 @@ const Login = () => {
     const [passwordVisibility, setPasswordVisibility] = useState("visibility_off")
     const [passwordInputType, setPasswordInputType] = useState("password")
     const [errorCode, setErrorCode] = useState(null)
+    const [ngrokHeaders, setNgrokHeaders] = useState({})
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (BASE_URL.includes("ngrok")){
+            setNgrokHeaders({"ngrok-skip-browser-warning": "true"})
+        }
+    }, []);
 
     const loginRequest = () =>{
         axios.get(BASE_URL + LOGIN_ENDPOINT, {
-            headers: {
-                "ngrok-skip-browser-warning": "true"
-            },
+            headers: ngrokHeaders,
             params: {
                 username: username,
                 password: password
@@ -25,7 +32,9 @@ const Login = () => {
         })
             .then((res) =>{
                 if(res.data.success){
-                    alert("פגז")
+                    setTimeout(() => {
+                        navigate(`/profile/${username}`);
+                    }, 1000);
                 }
                 else{
                     setErrorCode(res.data.errorCode)

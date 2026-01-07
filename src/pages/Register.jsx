@@ -1,7 +1,7 @@
 import Button from '../components/ui/Button';
 import styles from './Register.module.css';
 import {Link, useNavigate} from 'react-router-dom';
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import axios from "axios";
 import {BASE_URL, REGISTER_ENDPOINT} from "../config/config.js"
 import aviaImg from '../assets/Avia_troll.png';
@@ -19,6 +19,13 @@ const Register = () => {
     const [repeatPasswordVisibility, setRepeatPasswordVisibility] = useState("visibility_off")
     const [repeatPasswordInputType, setRepeatPasswordInputType] = useState("password")
     const [errorCode, setErrorCode] = useState(null)
+    const [ngrokHeaders, setNgrokHeaders] = useState({})
+
+    useEffect(() => {
+        if (BASE_URL.includes("ngrok")){
+            setNgrokHeaders({"ngrok-skip-browser-warning": "true"})
+        }
+    }, []);
 
     const navigate = useNavigate();
 
@@ -31,9 +38,7 @@ const Register = () => {
 
     const registerRequest = () => {
         axios.get(BASE_URL + REGISTER_ENDPOINT, {
-            headers: {
-                "ngrok-skip-browser-warning": "true"
-            },
+            headers: ngrokHeaders,
             params: {
                 firstName: firstName,
                 lastName: lastName,

@@ -1,0 +1,275 @@
+/* === Layout === */
+.pageWrapper {
+    min-height: calc(100vh - 70px);
+    background-color: var(--bg-app);
+    display: flex;
+    justify-content: center;
+    padding: 40px 16px;
+}
+
+.container {
+    width: 100%;
+    max-width: 800px; /* צר יותר מהפרופיל המלא, כדי שייראה כמו טופס ממוקד */
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+/* === כותרת העמוד === */
+.header {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.title {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--text-main);
+    margin: 0;
+}
+
+.subtitle {
+    font-size: 18px;
+    color: var(--text-muted);
+}
+
+/* === הכרטיס הראשי === */
+.card {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* הבאנר הצבעוני למעלה */
+.banner {
+    height: 128px;
+    width: 100%;
+    background: linear-gradient(to right, #2f2348, rgba(91, 19, 236, 0.3), #2f2348);
+    position: relative;
+}
+
+/* טקסטורה עדינה על הבאנר (אופציונלי) */
+.banner::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1h2v2H1V1zm4 0h2v2H5V1zm0 4h2v2H5V5zm4 0h2v2H9V5zm0 4h2v2H9V9zm-4 0h2v2H5V9zm-4 0h2v2H1V9zm0 4h2v2H1v-2zm4 0h2v2H5v-2zm4 0h2v2H9v-2zm0 4h2v2H9v-2zm-4 0h2v2H5v-2zm-4 0h2v2H1v-2z' fill='%23ffffff' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+    opacity: 0.3;
+}
+
+.cardContent {
+    padding: 32px;
+    position: relative;
+}
+
+/* === אזור התמונה (Avatar) === */
+.avatarSection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: -80px; /* דוחף למעלה כדי לעלות על הבאנר */
+    margin-bottom: 32px;
+    position: relative;
+    z-index: 10;
+}
+
+.avatarWrapper {
+    position: relative;
+    cursor: pointer;
+}
+
+.avatar {
+    width: 128px;
+    height: 128px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid var(--bg-surface); /* מסגרת בצבע הכרטיס */
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    background-color: var(--bg-app);
+}
+
+/* שכבת עריכה (מופיעה בהובר) */
+.editOverlay {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s;
+    backdrop-filter: blur(2px);
+    border: 4px solid var(--bg-surface); /* כדי לשמור על גודל זהה */
+}
+
+.avatarWrapper:hover .editOverlay {
+    opacity: 1;
+}
+
+.editIcon {
+    color: white;
+    font-size: 32px;
+}
+
+/* כפתור העפרון הקטן */
+.pencilBtn {
+    position: absolute;
+    bottom: 4px;
+    right: 4px;
+    background-color: var(--primary);
+    color: white;
+    border: 2px solid var(--bg-surface);
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    pointer-events: none; /* כדי שהלחיצה תעבור לתמונה */
+}
+
+.changePhotoText {
+    margin-top: 16px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--primary);
+    cursor: pointer;
+}
+
+.changePhotoText:hover {
+    text-decoration: underline;
+}
+
+/* === הטופס === */
+.formGrid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+    .formGrid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.inputGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.fullWidth {
+    grid-column: 1 / -1;
+}
+
+.label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #e5e7eb; /* gray-200 */
+}
+
+.input {
+    width: 100%;
+    height: 48px;
+    border-radius: 12px;
+    background-color: var(--bg-app);
+    border: 1px solid var(--border-color);
+    padding: 0 16px;
+    color: white;
+    font-size: 16px;
+    outline: none;
+    transition: all 0.2s;
+}
+
+.input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(91, 19, 236, 0.2);
+}
+
+.textarea {
+    width: 100%;
+    min-height: 120px;
+    border-radius: 12px;
+    background-color: var(--bg-app);
+    border: 1px solid var(--border-color);
+    padding: 16px;
+    color: white;
+    font-size: 16px;
+    outline: none;
+    transition: all 0.2s;
+    resize: none;
+    font-family: inherit;
+}
+
+.textarea:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(91, 19, 236, 0.2);
+}
+
+.charCount {
+    font-size: 12px;
+    color: var(--text-muted);
+    align-self: flex-end;
+}
+
+/* קו מפריד */
+.divider {
+    height: 1px;
+    background-color: var(--border-color);
+    margin: 32px auto;
+    width: 100%;
+    max-width: 600px;
+}
+
+/* כפתורים */
+.actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.cancelBtn {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: #d1d5db;
+    padding: 10px 24px;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.cancelBtn:hover {
+    background-color: rgba(255,255,255,0.05);
+    color: white;
+}
+
+.saveBtn {
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    padding: 10px 32px;
+    border-radius: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 10px 15px -3px rgba(91, 19, 236, 0.3);
+    transition: all 0.2s;
+}
+
+.saveBtn:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-1px);
+}
