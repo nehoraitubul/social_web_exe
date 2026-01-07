@@ -38,7 +38,7 @@ const Profile = () => {
             headers: requestHeaders,
             params: {
                 myUserId: 23,
-                targetUserId: "19"
+                targetUserId: "23"
             }
         })
             .then((res) => {
@@ -51,7 +51,7 @@ const Profile = () => {
                     city: res.data.user.city,
                     country: res.data.user.country,
                     id: res.data.user.id,
-                    imageUrl: res.data.user.imageProfile ? res.data.user.imageProfile : "https://robohash.org/" + res.data.user.username.charAt(0)
+                    imageUrl: res.data.user.pictureUrl ? res.data.user.pictureUrl : "https://robohash.org/" + res.data.user.username.charAt(0)
 
                 })
                 setCreatedAt(res.data.user.createdAt)
@@ -162,7 +162,7 @@ const Profile = () => {
                         <div className={styles.infoCard}>
                             <h3 className={styles.sectionTitle}>About</h3>
 
-                            {user.city !== null || user.country !== null &&
+                            {(user.city || user.country ) &&
                             <div className={styles.infoRow}>
                                 <span className="material-symbols-outlined" style={{color: 'var(--primary)'}}>location_on</span>
                                 <span style={{fontSize: '14px'}}>{user.city + ", " + user.country}</span>
