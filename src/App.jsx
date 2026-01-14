@@ -7,7 +7,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Profile from './pages/Profile';
 import EditProfile from "./pages/EditProfile.jsx";
-import {UserProvider} from "./UserContext.jsx";
+import {UserProvider} from "./UserProvider.jsx";
 
 function App() {
     return (

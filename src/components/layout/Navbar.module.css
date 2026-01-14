@@ -63,3 +63,252 @@
 .linkWrapper {
     text-decoration: none;
 }
+
+
+
+
+
+/*LOGGED IN*//*LOGGED IN*//*LOGGED IN*//*LOGGED IN*//*LOGGED IN*//*LOGGED IN*//*LOGGED IN*/
+
+/* === הגדרות כלליות === */
+.navbar {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    width: 100%;
+    /* תיקון: צבע רקע כהה במקום לבן */
+    background-color: #161022;
+    /* תיקון: גבול תחתון עדין ושקוף */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.container {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 24px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px;
+}
+
+/* === צד שמאל: לוגו === */
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.logoIcon {
+    width: 40px;
+    height: 40px;
+    background-color: var(--primary);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    box-shadow: 0 0 15px rgba(91, 19, 236, 0.4); /* Glow effect */
+    transition: transform 0.2s;
+}
+
+.brand:hover .logoIcon {
+    transform: scale(1.05);
+}
+
+.brandName {
+    font-size: 24px;
+    font-weight: 700;
+    color: white; /* תיקון: טקסט לבן */
+    letter-spacing: -0.5px;
+}
+
+/* === אמצע: חיפוש === */
+.searchContainer {
+    flex: 1;
+    max-width: 600px;
+    display: none;
+}
+
+@media (min-width: 768px) {
+    .searchContainer {
+        display: block;
+    }
+}
+
+.searchLabel {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.searchIcon {
+    position: absolute;
+    left: 16px;
+    color: #9ca3af; /* אפור בהיר */
+    font-size: 22px;
+    pointer-events: none;
+    transition: color 0.2s;
+}
+
+.searchInput {
+    width: 100%;
+    height: 48px;
+    padding-left: 48px;
+    padding-right: 16px;
+    /* תיקון: רקע כהה לאינפוט */
+    background-color: #1e162e;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 9999px;
+    color: white; /* טקסט לבן */
+    font-size: 16px;
+    outline: none;
+    transition: all 0.2s;
+}
+
+.searchInput::placeholder {
+    color: #6b7280;
+}
+
+/* אפקטים לחיפוש בפוקוס */
+.searchInput:focus {
+    background-color: #251d3a; /* קצת יותר בהיר בפוקוס */
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(91, 19, 236, 0.15);
+}
+
+.searchLabel:focus-within .searchIcon {
+    color: var(--primary);
+}
+
+/* === צד ימין: פעולות === */
+.actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-shrink: 0;
+}
+
+/* כפתור הבית */
+.homeBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 44px;
+    width: 44px;
+    border-radius: 12px;
+    /* רקע שקוף עם נגיעה של צבע */
+    background-color: rgba(255, 255, 255, 0.05);
+    color: #9ca3af;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.homeBtn:hover {
+    background-color: rgba(91, 19, 236, 0.1);
+    color: var(--primary);
+    border-color: rgba(91, 19, 236, 0.2);
+}
+
+/* כפתור יצירת פוסט */
+.createBtn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 44px;
+    padding: 0 24px;
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 9999px;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(91, 19, 236, 0.3);
+    transition: all 0.2s;
+}
+
+.createBtn:hover {
+    background-color: #4c0ecc;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(91, 19, 236, 0.4);
+}
+
+.createBtnText {
+    display: none;
+}
+
+@media (min-width: 1024px) {
+    .createBtnText {
+        display: inline;
+    }
+}
+
+/* קו מפריד */
+.divider {
+    height: 32px;
+    width: 1px;
+    background-color: rgba(255, 255, 255, 0.1); /* קו עדין */
+    margin: 0 4px;
+    display: none;
+}
+
+@media (min-width: 640px) {
+    .divider {
+        display: block;
+    }
+}
+
+/* כפתור פרופיל */
+.profileBtn {
+    position: relative;
+    text-decoration: none; /* ביטול קו תחתון של לינק */
+    display: block;
+    cursor: pointer;
+    padding: 2px;
+    border-radius: 50%;
+    transition: all 0.2s;
+}
+
+.avatarWrapper {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    padding: 2px;
+    border: 2px solid transparent;
+    transition: border-color 0.2s;
+    display: flex; /* כדי למרכז את התמונה */
+    align-items: center;
+    justify-content: center;
+}
+
+.profileBtn:hover .avatarWrapper {
+    border-color: var(--primary);
+}
+
+/* השינוי הגדול: זו מחלקה לתמונה אמיתית ולא לרקע */
+.avatar {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover; /* גורם לתמונה לא להימעך אלא למלא את העיגול */
+    display: block;
+}
+
+.onlineBadge {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    width: 12px;
+    height: 12px;
+    background-color: #22c55e;
+    border: 2px solid #161022;
+    border-radius: 50%;
+}

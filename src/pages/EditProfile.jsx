@@ -1,9 +1,9 @@
 import styles from './EditProfile.module.css';
 import {useContext, useEffect, useState} from "react";
-import {UserContext} from "../UserContext.jsx";
 import axios from "axios";
 import {BASE_URL, EDIT_PROFILE_ENDPOINT} from "../config/config.js";
 import {useNavigate} from "react-router-dom";
+import {UserContext} from "../context/UserContext.js";
 
 const EditProfile = () => {
     const { user, setUser } = useContext(UserContext)
@@ -15,6 +15,7 @@ const EditProfile = () => {
     const [country, setCountry] = useState(user.country)
     const [imageUrl, setImageUrl] = useState(user.imageUrl)
     const [description, setDescription] = useState(user.description)
+    const [bioLength, setBioLength] = useState(250 - user.description.length)
 
     const navigate = useNavigate();
 
@@ -36,28 +37,32 @@ const EditProfile = () => {
             requestHeaders["ngrok-skip-browser-warning"] = "true";
         }
 
-        axios.post(BASE_URL + EDIT_PROFILE_ENDPOINT , null,{
-            headers: requestHeaders,
-            params: {
-                userId: id,
+        axios.post(BASE_URL + EDIT_PROFILE_ENDPOINT ,
+            {
+                id: id,
                 firstName: firstName,
                 lastName: lastName,
                 city: city,
                 country: country,
-                imageUrl: imageUrl,
+                profileImageUrl: imageUrl,
                 description: description
-            }})
+            },
+            {
+            headers: requestHeaders,
+            })
             .then((res) =>{
                 if(res.data.success){
-                    setUser({
+                    setUser(prev => ({
+                        ...prev,
                         userId: res.data.user.userId,
                         firstName: res.data.user.firstName,
                         lastName: res.data.user.lastName,
                         city: res.data.user.city,
                         country: res.data.user.country,
-                        imageUrl: res.data.user.imageUrl,
+                        imageUrl: res.data.user.imageUrl ? res.data.user.imageUrl : "https://robohash.org/" + res.data.user.username.charAt(0),
                         description: res.data.user.description
-                    })
+                    }));
+                    navigate(`/profile/${user.username}`)
                 }
             })
             .catch((err)=>{
@@ -157,13 +162,18 @@ const EditProfile = () => {
                             <div className={`${styles.inputGroup} ${styles.fullWidth}`}>
                                 <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end'}}>
                                     <label className={styles.label}>Bio</label>
-                                    <span className={styles.charCount}>240 characters left</span>
+                                    <span className={styles.charCount}>{bioLength} characters left</span>
                                 </div>
                                 <textarea
                                     className={styles.textarea}
                                     value={description}
                                     placeholder="Tell us a little about yourself..."
-                                    onChange={(e) => setDescription(e.target.value)}
+                                    onChange={(e) =>{
+                                        if (e.target.textLength <= 250) {
+                                            setDescription(e.target.value)
+                                            setBioLength((250 - e.target.textLength))
+                                        }
+                                    }}
                                 ></textarea>
                             </div>
 

@@ -1,30 +1,43 @@
 import styles from './Profile.module.css';
 import {useEffect, useState, useMemo, useContext} from "react";
-import {BASE_URL, FOLLOWERS_COUNT_ENDPOINT, FOLLOWING_COUNT_ENDPOINT, PROFILE_ENDPOINT} from "../config/config.js";
+import {
+    BASE_URL, FOLLOW_USER_ENDPOINT,
+    FOLLOWERS_COUNT_ENDPOINT,
+    FOLLOWING_COUNT_ENDPOINT,
+    PROFILE_ENDPOINT,
+    UNFOLLOW_USER_ENDPOINT
+} from "../config/config.js";
 import axios from "axios";
 import {useNavigate, useParams} from "react-router-dom";
-import {UserContext} from "../UserContext.jsx";
+import FollowModal from "../components/modals/FollowModal.jsx";
+import FollowButton from "../components/ui/FollowButton.jsx";
+import {UserContext} from "../context/UserContext.js";
 
-const Profile = () => {
+const Profile = (props) => {
     const { user, setUser } = useContext(UserContext)
+    const [isLoggedUserProfile, setIsLoggedUserProfile] = useState(false)
 
-    const [firstName,setFirstName] = useState("")
-    const [lastName,setLastName] = useState("")
-    const [username,setUsername] = useState("")
-    const [createdAt, setCreatedAt] = useState("")
-    const [description,setDescription] = useState("")
-    const [city,setCity] = useState("")
+    const [firstName, setFirstName] = useState("")
+    const [lastName, setLastName] = useState("")
+    const [username, setUsername] = useState("")
+    const [city, setCity] = useState("")
     const [country, setCountry] = useState("")
-    const [imageProfile,setImageProfile] = useState("")
-    const [id,setId] = useState(0)
+    const [description, setDescription] = useState("")
+    const [imageUrl, setImageUrl] = useState("")
+    const [createdAt, setCreatedAt] = useState("")
+    const [id, setId] = useState(props.id ? props.id : null)
     const [isFollowing,setIsFollowing] = useState(false)
     const [following, setFollowing] = useState(0);
     const [followers, setFollowers] = useState(0);
 
+    const [isFollowersOpen, setIsFollowerOpen] = useState(false)
+    const [isFollowingModal, setIsFollowingModal] = useState(true);
+    const [isFollowModalOwnProfile, setIsFollowModalOwnProfile] = useState(false);
+
     const [errorCode, setErrorCode] = useState(null)
 
     //PARAMS (USERNAME)
-    const { usernameParam } = useParams();
+    const { username: urlUsername } = useParams();
     const navigate = useNavigate();
 
 
@@ -37,27 +50,28 @@ const Profile = () => {
         axios.get(BASE_URL + PROFILE_ENDPOINT, {
             headers: requestHeaders,
             params: {
-                myUserId: 23,
-                targetUserId: "23"
+                myUserId: user.id,
+                targetUserId: null,
+                targetUsername: urlUsername
             }
         })
             .then((res) => {
+                console.log(res.data)
+                console.log(urlUsername)
             if (res.data.success){
-                setUser({
-                    firstName: res.data.user.firstName,
-                    lastName: res.data.user.lastName,
-                    username: res.data.user.username,
-                    description: res.data.user.description,
-                    city: res.data.user.city,
-                    country: res.data.user.country,
-                    id: res.data.user.id,
-                    imageUrl: res.data.user.pictureUrl ? res.data.user.pictureUrl : "https://robohash.org/" + res.data.user.username.charAt(0)
-
-                })
+                setFirstName(res.data.user.firstName)
+                setLastName(res.data.user.lastName)
+                setUsername(res.data.user.username)
+                setDescription(res.data.user.description)
+                setCity(res.data.user.city)
+                setCountry(res.data.user.country)
+                setId(res.data.user.id)
+                setImageUrl(res.data.user.pictureUrl ? res.data.user.pictureUrl : "https://robohash.org/" + res.data.user.username.charAt(0))
                 setCreatedAt(res.data.user.createdAt)
                 setFollowers(res.data.followersCount)
                 setFollowing(res.data.followingCount)
                 setIsFollowing(res.data.following)
+                setIsLoggedUserProfile(user.id === res.data.user.id)
 
             }
             else {
@@ -68,8 +82,7 @@ const Profile = () => {
                 console.error(err)
             })
 
-    }, []);
-
+    }, [urlUsername, user]);
 
 
 
@@ -85,6 +98,8 @@ const Profile = () => {
         return `${month}/${year}`;
     }, [createdAt]);
 
+    console.log(user)
+
     return (
         <div className={styles.pageWrapper}>
             <div className={styles.container}>
@@ -99,29 +114,46 @@ const Profile = () => {
 
                             <div className={styles.avatarContainer}>
                                 <img
-                                    src={user.imageUrl}
-                                    alt={user.firstName + " " + user.lastName}
+                                    src={imageUrl}
+                                    alt={firstName + " " + lastName}
                                     className={styles.avatar}
                                 />
                                 <div className={styles.onlineBadge}></div>
                             </div>
 
-                            <h1 className={styles.userName}>{user.firstName + " " + user.lastName}</h1>
-                            <p className={styles.userHandle}>@{user.username}</p>
+                            <h1 className={styles.userName}>{firstName + " " + lastName}</h1>
+                            <p className={styles.userHandle}>@{username}</p>
 
                             <p className={styles.userBio}>
-                                {user.description}
+                                {description}
                             </p>
 
                             <div className={styles.actionsRow}>
 
-                                {usernameParam === id ?
+                                {urlUsername !== user.username ?
 
                                 <>
-                                    <button className={styles.followBtn}>
-                                        <span className="material-symbols-outlined" style={{fontSize: '18px'}}>{isFollowing? "person_off" : "person_add"}</span>
-                                        {isFollowing? "Unfollow" : "Follow"}
-                                    </button>
+                                        <FollowButton
+                                            targetUserId={id}
+                                            initialIsFollow={isFollowing}
+                                            className={styles.followBtn}
+                                            onSuccess={(isNowFollow) => {
+                                                setIsFollowing(isNowFollow);
+                                                setFollowers(prev => isNowFollow ? prev + 1 : prev - 1);
+                                            }}
+                                            followContent={
+                                                <>
+                                                    <span className="material-symbols-outlined" style={{fontSize: '18px'}}>person_add</span>
+                                                    Follow
+                                                </>
+                                            }
+                                            unfollowContent={
+                                                <>
+                                                    <span className="material-symbols-outlined" style={{fontSize: '18px'}}>person_off</span>
+                                                    Unfollow
+                                                </>
+                                            }
+                                        />
 
                                     <button className={styles.messageBtn}>
                                         <span className="material-symbols-outlined" style={{fontSize: '18px'}}>mail</span>
@@ -143,18 +175,39 @@ const Profile = () => {
                             </div>
 
                             <div className={styles.statsGrid}>
-                                <div className={styles.statItem}>
+
+                                {/* כפתור Followers - לחיץ */}
+                                <button
+                                    className={`${styles.statItem} ${styles.clickableStat}`}
+                                    onClick={() => {
+                                        setIsFollowerOpen(true)
+                                        setIsFollowingModal(false)
+                                        setIsFollowModalOwnProfile(true)
+                                    }}
+                                >
                                     <span className={styles.statNumber}>{followers}</span>
                                     <span className={styles.statLabel}>Followers</span>
-                                </div>
-                                <div className={styles.statItem}>
+                                </button>
+
+                                {/* כפתור Following - לחיץ */}
+                                <button
+                                    className={`${styles.statItem} ${styles.clickableStat}`}
+                                    onClick={() => {
+                                        setIsFollowerOpen(true)
+                                        setIsFollowingModal(true)
+                                        setIsFollowModalOwnProfile(false)
+                                    }}
+                                >
                                     <span className={styles.statNumber}>{following}</span>
                                     <span className={styles.statLabel}>Following</span>
-                                </div>
+                                </button>
+
+                                {/* Posts - לא לחיץ (נשאר DIV רגיל) */}
                                 <div className={styles.statItem}>
                                     <span className={styles.statNumber}>89</span>
                                     <span className={styles.statLabel}>Posts</span>
                                 </div>
+
                             </div>
                         </div>
 
@@ -162,10 +215,10 @@ const Profile = () => {
                         <div className={styles.infoCard}>
                             <h3 className={styles.sectionTitle}>About</h3>
 
-                            {(user.city || user.country ) &&
+                            {(city|| country) &&
                             <div className={styles.infoRow}>
                                 <span className="material-symbols-outlined" style={{color: 'var(--primary)'}}>location_on</span>
-                                <span style={{fontSize: '14px'}}>{user.city + ", " + user.country}</span>
+                                <span style={{fontSize: '14px'}}>{city+ ", " + country}</span>
                             </div>
                             }
                             <div className={styles.infoRow}>
@@ -189,16 +242,6 @@ const Profile = () => {
 
                 {/* === צד ימין: ה-Feed === */}
                 <section className={styles.feedSection}>
-
-                    {/* טאבים */}
-                    <div className={styles.tabs}>
-                        <button className={`${styles.tabBtn} ${styles.activeTab}`}>Posts</button>
-                        <button className={styles.tabBtn}>About</button>
-                        <button className={styles.tabBtn}>Friends</button>
-                        <button className={styles.tabBtn}>Photos</button>
-                    </div>
-
-                    {/* כאן היה ה-Input של יצירת פוסט ומחקתי אותו כבקשתך */}
 
                     {/* גריד הפוסטים */}
                     <div className={styles.postsGrid}>
@@ -376,6 +419,29 @@ const Profile = () => {
                 </section>
 
             </div>
+
+            {isFollowersOpen && (
+                <>
+
+                    <FollowModal
+                        onClose={() => setIsFollowerOpen(false)}
+                        isFollowingModal = {isFollowingModal}
+                        targetUserId = {id}
+                        isFollowModalOwnProfile = {isFollowModalOwnProfile}
+                        isLoggedUserProfile = {isLoggedUserProfile}
+                        onSuccess = {(isAddFollow, removeFollower = false) => {
+                            if (isLoggedUserProfile && !removeFollower){
+                                setFollowing(prev => isAddFollow ? Number(prev) + 1 : Number(prev) - 1);
+                            }
+                            if (isLoggedUserProfile && removeFollower){
+                                setFollowers(prev => isAddFollow ? Number(prev) + 1 : Number(prev) - 1);
+                            }
+                        }}
+                    >
+
+                    </FollowModal>
+                </>
+            )}
         </div>
     );
 };

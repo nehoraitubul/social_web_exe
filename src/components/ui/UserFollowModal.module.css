@@ -1,0 +1,203 @@
+/* === User Row Item === */
+.userRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.userRow:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.userInfo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(91, 19, 236, 0.2); /* primary border subtle */
+}
+
+.userDetails {
+    display: flex;
+    flex-direction: column;
+}
+
+.username {
+    font-size: 14px;
+    font-weight: 600;
+    color: white;
+    margin: 0;
+}
+
+.userRow:hover .username {
+    color: var(--primary); /* הופך לסגול בהובר */
+}
+
+.fullname {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.5);
+    margin: 0;
+}
+
+/* === Buttons === */
+/* כפתור "Following" (שקוף) */
+.btnFollowing {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+    padding: 6px 16px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    min-width: 90px;
+    transition: all 0.2s;
+}
+
+.btnFollowing:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* כפתור "Follow" (סגול מלא) */
+.btnFollow {
+    background-color: var(--primary);
+    border: none;
+    color: white;
+    padding: 6px 16px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    min-width: 90px;
+    box-shadow: 0 4px 10px rgba(91, 19, 236, 0.2);
+    transition: all 0.2s;
+}
+
+.btnFollow:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-1px);
+}
+
+/* מיכל לפעולות בצד ימין (כפתור עקוב + איקס) */
+.actionsWrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* כפתור האיקס */
+.removeBtn {
+    background: transparent;
+    border: none;
+    color: #9ca3af; /* אפור */
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.removeBtn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #ef4444; /* אדום בהובר */
+}
+
+/* === Confirm Popup (Overlay) === */
+.confirmOverlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    z-index: 9999; /* הכי גבוה שאפשר */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.2s ease-out;
+}
+
+.confirmBox {
+    background-color: #1e162e; /* surface-dark */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 32px;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+    animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.confirmAvatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin: 0 auto 16px;
+    border: 4px solid #161022;
+    object-fit: cover;
+}
+
+.confirmTitle {
+    font-size: 20px;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 8px;
+}
+
+.confirmText {
+    font-size: 14px;
+    color: #9ca3af;
+    margin-bottom: 24px;
+    line-height: 1.5;
+}
+
+.confirmActions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.btnConfirmRemove {
+    background-color: rgba(239, 68, 68, 0.1); /* אדום שקוף */
+    color: #ef4444;
+    border: none;
+    padding: 12px;
+    border-radius: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btnConfirmRemove:hover {
+    background-color: #ef4444;
+    color: white;
+}
+
+.btnCancel {
+    background-color: transparent;
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 12px;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btnCancel:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }

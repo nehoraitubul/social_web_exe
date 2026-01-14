@@ -49,7 +49,7 @@ const Register = () => {
             .then((res) => {
                 if (res.data.success) {
                     setTimeout(() => {
-                        navigate('/profile');
+                        navigate(`/profile/${username}`);
                     }, 1000);
                 } else {
                     setErrorCode(res.data.errorCode)
@@ -111,6 +111,14 @@ const Register = () => {
 
     const isPasswordMatch = password !== confirmPassword;
 
+    const handleFormSubmit = (e) => {
+        e.preventDefault();
+
+        if (!enableRegister) {
+            registerRequest();
+        }
+    }
+
     return (
         <div className={styles.pageWrapper}>
 
@@ -165,7 +173,7 @@ const Register = () => {
                                 <p className={styles.formSubtitle}>It's free and takes less than a minute.</p>
                             </div>
 
-                            <form onSubmit={(e) => e.preventDefault()}>
+                            <form onSubmit={handleFormSubmit}>
 
                                 {/* First Name */}
                                 <div className={styles.inputGroup}>
@@ -258,7 +266,7 @@ const Register = () => {
                                     <Button variant="primary"
                                             style={{ width: '100%' }}
                                             disabled={enableRegister}
-                                            onClick={registerRequest}>
+                                            type="submit" >
 
                                         Create Account
                                         <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>arrow_forward</span>
@@ -271,7 +279,7 @@ const Register = () => {
                                             <span className="material-symbols-outlined" style={{fontSize: '20px'}}>
                                                 error
                                             </span>
-                                                                                {errorCodeMessage()}
+                                            {errorCodeMessage()}
                                         </div>
                                     )}
                                 </>

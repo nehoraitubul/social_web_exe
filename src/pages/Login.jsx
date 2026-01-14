@@ -1,11 +1,13 @@
 import {Link, useNavigate} from 'react-router-dom';
 import Button from '../components/ui/Button';
 import styles from './Login.module.css';
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import axios from "axios";
 import {BASE_URL, LOGIN_ENDPOINT, PROFILE_ENDPOINT} from "../config/config.js";
+import {UserContext} from "../context/UserContext.js";
 
 const Login = () => {
+    const { setUser } = useContext(UserContext);
 
     const [username, setUsername] = useState("")
     const [password,setPassword] = useState("")
@@ -13,6 +15,7 @@ const Login = () => {
     const [passwordInputType, setPasswordInputType] = useState("password")
     const [errorCode, setErrorCode] = useState(null)
     const [ngrokHeaders, setNgrokHeaders] = useState({})
+    const [disabled, setDisabled] = useState(false);
 
     const navigate = useNavigate();
 
@@ -23,6 +26,7 @@ const Login = () => {
     }, []);
 
     const loginRequest = () =>{
+        setDisabled(true)
         axios.get(BASE_URL + LOGIN_ENDPOINT, {
             headers: ngrokHeaders,
             params: {
@@ -31,10 +35,12 @@ const Login = () => {
             }
         })
             .then((res) =>{
+                setDisabled(false)
                 if(res.data.success){
+                    setUser(res.data.user);
                     setTimeout(() => {
                         navigate(`/profile/${username}`);
-                    }, 1000);
+                    }, 300);
                 }
                 else{
                     setErrorCode(res.data.errorCode)
@@ -42,6 +48,9 @@ const Login = () => {
             })
             .catch((err)=>{
                 console.error(err)
+            })
+            .finally(() => {
+                setDisabled(false)
             })
     }
 
@@ -71,6 +80,20 @@ const Login = () => {
         }
     }
 
+    const checkLoginDetailsAve =
+        username.trim().length === 0 || password.trim().length === 0 || disabled
+
+
+    const handleFormSubmit = (e) => {
+        e.preventDefault();
+
+        if (!checkLoginDetailsAve) {
+            loginRequest();
+        }
+    }
+
+
+
 
     return (
         <div className={styles.pageWrapper}>
@@ -96,7 +119,7 @@ const Login = () => {
                         <p className={styles.subtitle}>Enter your details below to access your feed.</p>
                     </div>
 
-                    <form className={styles.form} onSubmit={(e) => e.preventDefault()}>
+                    <form className={styles.form} onSubmit={handleFormSubmit}>
 
                         {/* Username Field */}
                         <div className={styles.inputGroup}>
@@ -140,9 +163,12 @@ const Login = () => {
 
                         {/* Login Button */}
                         <div style={{ marginTop: '8px' }}>
-                            <Button variant="primary"
-                                    style={{ width: '100%', height: '56px' }}
-                                    onClick={loginRequest} >
+                            <Button
+                                disabled={checkLoginDetailsAve}
+                                variant="primary"
+                                style={{ width: '100%', height: '56px' }}
+                                type="submit" >
+
                                 Log In
                             </Button>
                         </div>
