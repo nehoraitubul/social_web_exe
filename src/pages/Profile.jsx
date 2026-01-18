@@ -14,7 +14,7 @@ import FollowButton from "../components/ui/FollowButton.jsx";
 import {UserContext} from "../context/UserContext.js";
 
 const Profile = (props) => {
-    const { user, setUser } = useContext(UserContext)
+    const { user } = useContext(UserContext)
     const [isLoggedUserProfile, setIsLoggedUserProfile] = useState(false)
 
     const [firstName, setFirstName] = useState("")

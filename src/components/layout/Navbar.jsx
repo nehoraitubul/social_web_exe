@@ -1,11 +1,14 @@
 import {Link, useNavigate} from 'react-router-dom';
 import Button from '../ui/Button';
 import styles from './Navbar.module.css';
-import {useContext} from "react";
+import {useContext, useState} from "react";
 import {UserContext} from "../../context/UserContext.js";
+import CreatePostModal from "../modals/CreatePostModal.jsx";
 
 const Navbar = () => {
     const { user, setUser } = useContext(UserContext);
+
+    const [isPostModalOpen, setIsPostModalOpen] = useState(false);
 
     const navigate = useNavigate();
 
@@ -87,7 +90,9 @@ const Navbar = () => {
                     </Link>
 
                     {/* כפתור יצירת פוסט */}
-                    <button className={styles.createBtn}>
+                    <button
+                        className={styles.createBtn}
+                        onClick={() => setIsPostModalOpen(true)}>
                         <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>add_circle</span>
                         <span className={styles.createBtnText}>Create Post</span>
                     </button>
@@ -112,6 +117,11 @@ const Navbar = () => {
                 </div>
 
             </div>
+
+            {isPostModalOpen &&
+                <CreatePostModal onClose={() => setIsPostModalOpen(false)} />
+            }
+
         </nav>
     );
 };

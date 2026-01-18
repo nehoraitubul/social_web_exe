@@ -1,0 +1,324 @@
+/* === Overlay (הרקע הכהה) === */
+.overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    z-index: 1000; /* חייב להיות מעל ה-Navbar */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    animation: fadeIn 0.2s ease-out;
+}
+
+/* === Modal Container === */
+.modal {
+    width: 100%;
+    max-width: 600px;
+    background-color: #1e1a26; /* surface-dark */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow: hidden;
+}
+
+/* === Header === */
+.header {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.title {
+    font-size: 18px;
+    font-weight: 700;
+    color: white;
+    margin: 0;
+}
+
+.closeBtn {
+    position: absolute;
+    right: 16px;
+    background: transparent;
+    border: none;
+    color: #9ca3af;
+    padding: 8px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.closeBtn:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: white;
+}
+
+/* === User Info === */
+.userInfo {
+    padding: 20px 20px 0 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.userName {
+    font-size: 16px;
+    font-weight: 600;
+    color: white;
+    margin: 0;
+}
+
+/* === Text Area === */
+.inputSection {
+    padding: 0 20px;
+    flex: 1;
+}
+
+.textarea {
+    width: 100%;
+    min-height: 150px;
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 20px; /* טקסט גדול וקריא */
+    font-family: inherit;
+    resize: none;
+    outline: none;
+    margin-top: 16px;
+    line-height: 1.5;
+}
+
+.textarea::placeholder {
+    color: #6b7280;
+}
+
+/* === Toolbar (Emoji only) === */
+.toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end; /* אימוג'י בצד ימין */
+    padding-bottom: 12px;
+}
+
+.iconBtn {
+    background: transparent;
+    border: none;
+    color: #9ca3af;
+    padding: 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s;
+}
+
+.iconBtn:hover {
+    color: #fbbf24; /* צהוב לאימוג'י */
+    background-color: rgba(251, 191, 36, 0.1);
+}
+
+/* === Add to Post (Image Only) === */
+.addToPost {
+    padding: 0 20px 20px 20px;
+}
+
+.imageUploadBtn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background-color: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.imageUploadBtn:hover {
+    background-color: rgba(34, 197, 94, 0.1); /* ירוק עדין ברקע */
+    border-color: rgba(34, 197, 94, 0.2);
+}
+
+.imageIcon {
+    color: #22c55e; /* ירוק */
+    font-size: 24px;
+}
+
+.uploadText {
+    color: white;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* === Footer === */
+.footer {
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end; /* כפתור בצד ימין */
+    gap: 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.charCount {
+    font-size: 12px;
+    color: #6b7280;
+}
+
+.postBtn {
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    padding: 10px 32px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    box-shadow: 0 0 15px rgba(91, 19, 236, 0.3);
+    transition: all 0.2s;
+}
+
+.postBtn:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 0 20px rgba(91, 19, 236, 0.5);
+}
+
+.postBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Animations */
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+/* === Image Preview Area === */
+.previewContainer {
+    position: relative;
+    margin: 0 20px 20px 20px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+
+    /* השינוי הגדול: מרכוז ורקע */
+    background-color: rgba(0, 0, 0, 0.2); /* רקע כהה עדין */
+    display: flex;
+    justify-content: center; /* ממקם את התמונה באמצע לרוחב */
+    align-items: center;     /* ממקם את התמונה באמצע לגובה */
+    padding: 10px;           /* רווח קטן כדי שהתמונה לא תיגע בקצוות */
+    min-height: 200px;       /* גובה מינימלי לאזור */
+}
+
+.previewImage {
+    /* השינוי: לא מכריחים 100% רוחב */
+    width: auto;        /* הרוחב נקבע לפי התמונה */
+    max-width: 100%;    /* אבל לא חורג מהקונטיינר */
+    height: auto;       /* שומר על יחס גובה-רוחב */
+    max-height: 400px;  /* הגדלתי קצת את הגובה המקסימלי */
+
+    object-fit: contain; /* הקסם: מציג את כל התמונה בלי לחתוך כלום! */
+    border-radius: 8px;  /* פינות עגולות עדינות לתמונה עצמה */
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3); /* צל לתמונה כדי שתבלוט מהרקע */
+}
+
+.removeImageBtn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background-color: rgba(30, 30, 30, 0.8); /* כהה יותר */
+    color: white;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    backdrop-filter: blur(4px);
+    transition: all 0.2s;
+    z-index: 10; /* שיהיה מעל התמונה בטוח */
+}
+
+.removeImageBtn:hover {
+    background-color: #ef4444; /* אדום */
+    border-color: #ef4444;
+}
+
+/* === Toolbar (Emoji only) === */
+.toolbar {
+    position: relative; /* הוספתי: קריטי כדי שהפופ-אפ יידע איפה למקם את עצמו */
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-bottom: 12px;
+}
+
+/* === Emoji Popover (חדש) === */
+.emojiPopover {
+    position: absolute;
+    top: 50px; /* ממקם אותו מתחת לכפתור */
+    right: 0;  /* מצמיד אותו לצד ימין (איפה שהכפתור נמצא) */
+    z-index: 2000; /* חייב להיות גבוה מאוד */
+
+    /* עיצוב המסגרת שתתאים למודל שלך */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.6); /* צל חזק כדי להבדיל מהרקע */
+    background-color: #1e1a26; /* אותו צבע רקע כמו המודל */
+}
+
+/* === שאר הקובץ נשאר זהה... === */
+
+/* רק שים לב לתיקון קטן ב-Modal כדי שהפופ-אפ לא ייחתך אם הוא יוצא מהגבולות */
+.modal {
+    /* ... שאר ההגדרות ... */
+    overflow: visible; /* שיניתי מ-hidden ל-visible כדי שהאימוג'י לא ייחתך */
+}
+
+/* === עיצוב סרגל גלילה (Scrollbar) מותאם לאימוג'י === */
+
+/* תופס כל אלמנט בתוך הפופ-אפ שיש לו גלילה */
+.emojiPopover *::-webkit-scrollbar {
+    width: 6px;               /* סרגל דק יותר (במקום 16px) */
+    background-color: transparent; /* רקע שקוף כדי שיתמזג */
+}
+
+/* המסלול של הגלילה */
+.emojiPopover *::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+/* הידית של הגלילה (החלק שזז) */
+.emojiPopover *::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.2); /* אפור חצי שקוף */
+    border-radius: 10px;      /* פינות עגולות */
+    border: 2px solid transparent; /* טריק כדי ליצור מרווח מהצדדים */
+    background-clip: content-box;  /* גורם לבורדר להיות שקוף באמת */
+}
+
+/* כשעוברים עם העכבר על הידית */
+.emojiPopover *::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 255, 255, 0.4); /* קצת יותר בהיר */
+}
