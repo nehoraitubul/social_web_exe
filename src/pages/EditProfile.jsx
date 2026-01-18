@@ -1,5 +1,5 @@
 import styles from './EditProfile.module.css';
-import {useContext, useEffect, useState} from "react";
+import {useContext, useEffect, useRef, useState} from "react";
 import axios from "axios";
 import {BASE_URL, EDIT_PROFILE_ENDPOINT} from "../config/config.js";
 import {useNavigate} from "react-router-dom";
@@ -13,9 +13,12 @@ const EditProfile = () => {
     const [lastName, setLastName] = useState(user.lastName)
     const [city, setCity] = useState(user.city)
     const [country, setCountry] = useState(user.country)
-    const [imageUrl, setImageUrl] = useState(user.imageUrl)
+    const [imageUrl, setImageUrl] = useState(user.pictureUrl)
     const [description, setDescription] = useState(user.description)
-    const [bioLength, setBioLength] = useState(250 - user.description.length)
+    const [bioLength, setBioLength] = useState(250 - (user.description || "").length);
+
+    const [profileImageFile, setProfileImageFile] = useState(null);
+    const fileInputRef = useRef(null);
 
     const navigate = useNavigate();
 
@@ -26,27 +29,32 @@ const EditProfile = () => {
         setLastName(user.lastName)
         setCity(user.city)
         setCountry(user.country)
-        setImageUrl(user.imageUrl)
+        setImageUrl(user.pictureUrl)
         setDescription(user.description)
     }, [user]);
 
 
     const editProfile = () =>{
-        const requestHeaders = {};
+        const requestHeaders = {
+            "Content-Type": "multipart/form-data"
+        };
+
         if (BASE_URL.includes("ngrok")) {
             requestHeaders["ngrok-skip-browser-warning"] = "true";
         }
 
-        axios.post(BASE_URL + EDIT_PROFILE_ENDPOINT ,
-            {
-                id: id,
-                firstName: firstName,
-                lastName: lastName,
-                city: city,
-                country: country,
-                profileImageUrl: imageUrl,
-                description: description
-            },
+        const formData = new FormData();
+        formData.append("userId", id)
+        formData.append("firstName", firstName)
+        formData.append("lastName", lastName)
+        formData.append("description", description)
+        formData.append("city", city)
+        formData.append("country", country)
+        if (profileImageFile){
+            formData.append("file", profileImageFile)
+        }
+
+        axios.post(BASE_URL + EDIT_PROFILE_ENDPOINT , formData,
             {
             headers: requestHeaders,
             })
@@ -59,7 +67,7 @@ const EditProfile = () => {
                         lastName: res.data.user.lastName,
                         city: res.data.user.city,
                         country: res.data.user.country,
-                        imageUrl: res.data.user.imageUrl ? res.data.user.imageUrl : "https://robohash.org/" + res.data.user.username.charAt(0),
+                        pictureUrl: res.data.user.pictureUrl ? res.data.user.pictureUrl : "https://robohash.org/" + res.data.user.username.charAt(0),
                         description: res.data.user.description
                     }));
                     navigate(`/profile/${user.username}`)
@@ -69,6 +77,24 @@ const EditProfile = () => {
                 console.error(err)
             })
         }
+
+
+    const handleImageChange = (event) => {
+        const file = event.target.files[0]; // לוקחים את הקובץ הראשון שנבחר
+        if (file) {
+            setProfileImageFile(file); // שומרים את הקובץ לשליחה עתידית
+
+            // יצירת URL זמני לתצוגה מקדימה (Preview)
+            // זה גורם לתמונה להתחלף מיד על המסך בלי לחכות לשרת
+            const previewUrl = URL.createObjectURL(file);
+            setImageUrl(previewUrl);
+        }
+    };
+
+    // פונקציה שמדמה לחיצה על האינפוט הנסתר
+    const handleAvatarClick = () => {
+        fileInputRef.current.click();
+    }
 
 
     return (
@@ -91,23 +117,32 @@ const EditProfile = () => {
 
                         {/* אזור התמונה */}
                         <div className={styles.avatarSection}>
-                            <div className={styles.avatarWrapper}>
+
+                            {/* 1. הוספנו onClick שעושה טריגר לאינפוט הנסתר */}
+                            <div className={styles.avatarWrapper} onClick={handleAvatarClick}>
                                 <img
                                     src={imageUrl}
                                     alt="Profile"
                                     className={styles.avatar}
                                 />
 
-                                {/* Overlay בהובר */}
                                 <div className={styles.editOverlay}>
                                     <span className="material-symbols-outlined" style={{fontSize: '32px', color: 'white'}}>photo_camera</span>
                                 </div>
 
-                                {/* כפתור עפרון קבוע */}
                                 <div className={styles.pencilBtn}>
                                     <span className="material-symbols-outlined" style={{fontSize: '16px'}}>edit</span>
                                 </div>
                             </div>
+
+                            {/* 2. האינפוט הנסתר - זה הטריק! */}
+                            <input
+                                type="file"
+                                ref={fileInputRef}           // חיבור ל-useRef
+                                onChange={handleImageChange} // מה קורה כשבוחרים קובץ
+                                style={{ display: 'none' }}  // שלא יראו אותו
+                                accept="image/*"             // מקבל רק תמונות
+                            />
 
                         </div>
 

@@ -39,7 +39,6 @@ const FollowButton = ({ targetUserId, initialIsFollow, onSuccess, className, fol
                     if (onSuccess) {
                         onSuccess(newStatus);
                         setIsLoading(false);
-                        console.log("newStatus:" + newStatus)
                     }
                 }
             })

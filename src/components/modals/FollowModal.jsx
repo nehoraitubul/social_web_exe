@@ -9,6 +9,7 @@ const FollowModal = ({ onClose, isFollowingModal, targetUserId, onSuccess, isFol
     const { user, setUser } = useContext(UserContext)
 
     const [users, setUsers] = useState([])
+    const [search, setSearch] = useState("")
 
     const reqUrl = isFollowingModal ? GET_FOLLOWING_USERS : GET_FOLLOWERS_USERS;
 
@@ -35,6 +36,15 @@ const FollowModal = ({ onClose, isFollowingModal, targetUserId, onSuccess, isFol
             })
     }, []);
 
+    const filterUsers = users.filter((user) =>{
+        if (!user.user) return false
+
+        const lowerCseUsername = user.user.username.toLowerCase()
+        const lowerCaseName = `${user.user.firstName} ${user.user.lastName}`.toLowerCase();
+        const lowerCaseSearch = search.toLowerCase()
+        return lowerCseUsername.includes(lowerCaseSearch) || lowerCaseName.includes(lowerCaseSearch)
+    })
+
     return (
         // ה-Overlay השחור מסביב
         <div className={styles.overlay} onClick={onClose}>
@@ -56,6 +66,8 @@ const FollowModal = ({ onClose, isFollowingModal, targetUserId, onSuccess, isFol
                         <span className="material-symbols-outlined" style={{ color: 'rgba(255,255,255,0.4)', fontSize: '20px' }}>search</span>
                         <input
                             type="text"
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
                             placeholder={`Search ${reqUrl === GET_FOLLOWING_USERS ? "following" : "followers"}...`}
                             className={styles.searchInput}
                         />
@@ -66,7 +78,7 @@ const FollowModal = ({ onClose, isFollowingModal, targetUserId, onSuccess, isFol
                 <div className={styles.listContainer}>
 
                     {
-                        users.map((user) => {
+                        filterUsers.map((user) => {
                             return(
                                 <UserFollowModal
                                     firstName ={user.user.firstName}

@@ -6,14 +6,15 @@ import {UserContext} from "./context/UserContext.js";
 // תפקידה: לקבל אובייקט יוזר ולוודא שיש לו תמונה תקינה
 const normalizeUser = (userData) => {
     if (!userData) return null;
+    console.log(userData.pictureUrl)
 
     // יוצרים עותק כדי לא לשנות את המקור ישירות
     const updatedUser = { ...userData };
 
     // הלוגיקה: אם אין URL או שהוא ריק, מייצרים רובוט לפי האות הראשונה של השם משתמש
-    if (!updatedUser.imageUrl || updatedUser.imageUrl.trim() === "") {
+    if (!updatedUser.pictureUrl || updatedUser.pictureUrl.trim() === "") {
         const firstChar = updatedUser.username ? updatedUser.username.charAt(0) : "U";
-        updatedUser.imageUrl = `https://robohash.org/${firstChar}`;
+        updatedUser.pictureUrl = `https://robohash.org/${firstChar}`;
     }
 
     return updatedUser;
@@ -33,7 +34,7 @@ export const UserProvider = ({ children }) => {
                 username: "",
                 id: 0,
                 description: "",
-                imageUrl: "",
+                pictureUrl: "",
                 city: "",
                 country: ""
             };
@@ -45,7 +46,7 @@ export const UserProvider = ({ children }) => {
                 username: "",
                 id: 0,
                 description: "",
-                imageUrl: "",
+                pictureUrl: "",
                 city: "",
                 country: ""
             };

@@ -100,7 +100,7 @@ const Navbar = () => {
                         <div className={styles.avatarWrapper}>
                             {/* שימוש בתגית IMG אמיתית עם ה-SRC הדינמי */}
                             <img
-                                src={user.imageUrl}
+                                src={user.pictureUrl}
                                 alt={user.username}
                                 className={styles.avatar}
                             />

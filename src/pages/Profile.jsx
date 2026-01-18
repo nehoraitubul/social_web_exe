@@ -56,8 +56,6 @@ const Profile = (props) => {
             }
         })
             .then((res) => {
-                console.log(res.data)
-                console.log(urlUsername)
             if (res.data.success){
                 setFirstName(res.data.user.firstName)
                 setLastName(res.data.user.lastName)
@@ -98,10 +96,13 @@ const Profile = (props) => {
         return `${month}/${year}`;
     }, [createdAt]);
 
-    console.log(user)
 
     return (
         <div className={styles.pageWrapper}>
+            {/*<div className={styles.ambientBg}>*/}
+            {/*    <div className={styles.blob1}></div>*/}
+            {/*    <div className={styles.blob2}></div>*/}
+            {/*</div>*/}
             <div className={styles.container}>
 
                 {/* === צד שמאל: פרופיל ומידע (Sticky) === */}
@@ -118,7 +119,6 @@ const Profile = (props) => {
                                     alt={firstName + " " + lastName}
                                     className={styles.avatar}
                                 />
-                                <div className={styles.onlineBadge}></div>
                             </div>
 
                             <h1 className={styles.userName}>{firstName + " " + lastName}</h1>

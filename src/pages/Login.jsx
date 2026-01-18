@@ -97,6 +97,10 @@ const Login = () => {
 
     return (
         <div className={styles.pageWrapper}>
+            <div className={styles.ambientBg}>
+                <div className={styles.blob1}></div>
+                <div className={styles.blob2}></div>
+            </div>
             <div className={styles.container}>
 
                 {/* === צד שמאל: תמונה (Hero) === */}

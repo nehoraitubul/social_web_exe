@@ -38,7 +38,6 @@ const UserFollowModal = (props) => {
         if (BASE_URL.includes("ngrok")) {
             requestHeaders["ngrok-skip-browser-warning"] = "true";
         }
-        console.log(user.id + "--" + props.id)
 
         axios.post(BASE_URL + REMOVE_FOLLOWER_ENDPOINT,
             {

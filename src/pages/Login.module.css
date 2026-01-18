@@ -5,6 +5,27 @@
     align-items: center;
     justify-content: center;
     padding: 40px 20px;
+    position: relative; /* חובה */
+    overflow: hidden;   /* חובה */
+}
+
+.ambientBg {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none;
+    z-index: 0;
+}
+.blob1 {
+    position: absolute; top: -10%; left: -10%; width: 50%; height: 50%;
+    background: rgba(91, 19, 236, 0.15);
+    filter: blur(120px);
+    border-radius: 50%;
+}
+.blob2 {
+    position: absolute; bottom: -10%; right: -10%; width: 50%; height: 50%;
+    background: rgba(147, 51, 234, 0.15);
+    filter: blur(120px);
+    border-radius: 50%;
 }
 
 .container {
@@ -14,6 +35,8 @@
     grid-template-columns: 1fr;
     gap: 40px;
     min-height: 600px; /* גובה מינימלי כדי שייראה טוב */
+    position: relative; /* חובה כדי שיעלה מעל הרקע */
+    z-index: 1;
 }
 
 /* בדסקטופ - חלוקה ל-2 */
