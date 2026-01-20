@@ -15,6 +15,10 @@ export const FOLLOW_USER_ENDPOINT = "/follow-user"
 export const UNFOLLOW_USER_ENDPOINT = "/remove-follow"
 export const REMOVE_FOLLOWER_ENDPOINT = "/remove-follower"
 export const CREATE_POST_ENDPOINT = "/posts/create"
+export const GET_USER_POSTS_ENDPOINT = "/posts/get-user-posts"
+export const TOGGLE_LIKE = "/like/toggle-like"
+
+
 
 
 

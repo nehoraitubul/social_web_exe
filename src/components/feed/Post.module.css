@@ -1,0 +1,243 @@
+/* === Card Container === */
+.card {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 24px;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s ease;
+    position: relative; /* חשוב עבור מיקומים */
+}
+
+.card:hover {
+    box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.3);
+    border-color: rgba(91, 19, 236, 0.2);
+}
+
+/* === Header === */
+.header {
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.userInfo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(91, 19, 236, 0.1);
+}
+
+.userMeta {
+    display: flex;
+    flex-direction: column;
+}
+
+.userName {
+    font-size: 16px;
+    font-weight: 700;
+    color: white;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.timestamp {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 2px;
+}
+
+/* מעטפת לכפתור האפשרויות כדי שהתפריט יתמקם יחסית אליו */
+.menuWrapper {
+    position: relative;
+}
+
+.moreBtn {
+    color: var(--text-muted);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 50%;
+    transition: color 0.2s;
+    display: flex;
+}
+
+.moreBtn:hover {
+    color: white;
+    background-color: rgba(255,255,255,0.05);
+}
+
+/* === Dropdown Menu (Delete) === */
+.menuDropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 160px;
+    background-color: #2a2336; /* קצת יותר בהיר מהרקע */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 6px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    z-index: 10;
+    margin-top: 4px;
+    animation: fadeIn 0.2s ease;
+}
+
+.deleteBtn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    border: none;
+    padding: 10px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: left;
+    color: #ef4444; /* אדום */
+    font-size: 14px;
+    font-weight: 600;
+    transition: background 0.2s;
+}
+
+.deleteBtn:hover {
+    background-color: rgba(239, 68, 68, 0.1);
+}
+
+/* === Content Types === */
+
+.regularText {
+    padding: 0 20px 20px 20px;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #d1d5db;
+}
+
+.fancyTextContainer {
+    margin: 0 20px 20px 20px;
+    padding: 40px 30px;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(168, 85, 247, 0.1));
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 180px;
+    border: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.fancyText {
+    font-size: 20px;
+    font-weight: 500;
+    font-style: italic;
+    text-align: center;
+    color: #e5e7eb;
+    line-height: 1.5;
+}
+
+/* === Media / Image Updates - PROFESSIONAL COMPACT VERSION === */
+.mediaContainer {
+    width: 100%;
+    /* קובעים גובה קבוע למיכל! זה המפתח למניעת "בומבסטיות".
+       400px זה גובה מעולה שנותן נוכחות אבל משאיר מקום לעוד פוסטים במסך. */
+    height: 400px;
+
+    /* רקע כהה עדין שמשתלב טוב יותר מהשחור המוחלט */
+    background-color: rgba(0, 0, 0, 0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    margin-top: 12px;
+    /* עיגול פינות עדין פנימי לתמונה - נראה מאוד מודרני */
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.postImage {
+    /* התמונה תנסה למלא את ה-400px שהגדרנו */
+    width: 100%;
+    height: 100%;
+
+    /* שומר על האיכות ולא חותך! אם התמונה לא בפרופורציה, ייווצרו שוליים שקופים בצדדים */
+    object-fit: contain;
+    object-position: center;
+    display: block;
+
+    /* טאץ' מקצועי: צל עדין שנותן לתמונה עומק וגורם לה "לצוף" קצת בתוך הקונטיינר */
+    filter: drop-shadow(0 10px 15px rgba(0,0,0,0.3));
+}
+
+/* === Footer / Actions === */
+.footer {
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: auto;
+}
+
+.actionsLeft {
+    display: flex;
+    gap: 24px;
+}
+
+.actionBtn {
+    background: none;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.actionBtn:hover {
+    color: var(--primary);
+}
+
+/* === Like Button States === */
+/* מצב רגיל (הובר) */
+.likeBtn:hover {
+    color: #ec4899;
+}
+
+/* מצב פעיל (Liked) */
+.liked {
+    color: #ec4899 !important; /* דורס את הצבע האפור */
+}
+
+/* ממלא את הלב כשיש את המחלקה liked */
+.liked .material-symbols-outlined {
+    font-variation-settings: 'FILL' 1;
+    animation: heartPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* אייקונים */
+.icon {
+    font-size: 22px;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes heartPop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.3); }
+    100% { transform: scale(1); }
+}

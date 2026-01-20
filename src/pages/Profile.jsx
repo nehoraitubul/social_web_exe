@@ -1,9 +1,9 @@
 import styles from './Profile.module.css';
-import {useEffect, useState, useMemo, useContext} from "react";
+import {useEffect, useState, useMemo, useContext, useRef} from "react";
 import {
     BASE_URL, FOLLOW_USER_ENDPOINT,
     FOLLOWERS_COUNT_ENDPOINT,
-    FOLLOWING_COUNT_ENDPOINT,
+    FOLLOWING_COUNT_ENDPOINT, GET_USER_POSTS_ENDPOINT,
     PROFILE_ENDPOINT,
     UNFOLLOW_USER_ENDPOINT
 } from "../config/config.js";
@@ -12,6 +12,7 @@ import {useNavigate, useParams} from "react-router-dom";
 import FollowModal from "../components/modals/FollowModal.jsx";
 import FollowButton from "../components/ui/FollowButton.jsx";
 import {UserContext} from "../context/UserContext.js";
+import Post from "../components/feed/Post.jsx";
 
 const Profile = (props) => {
     const { user } = useContext(UserContext)
@@ -29,10 +30,20 @@ const Profile = (props) => {
     const [isFollowing,setIsFollowing] = useState(false)
     const [following, setFollowing] = useState(0);
     const [followers, setFollowers] = useState(0);
+    const [postCount, setPostCount] = useState(0)
 
     const [isFollowersOpen, setIsFollowerOpen] = useState(false)
     const [isFollowingModal, setIsFollowingModal] = useState(true);
     const [isFollowModalOwnProfile, setIsFollowModalOwnProfile] = useState(false);
+
+
+    const [page, setPage] = useState(1);
+    const [posts, setPosts] = useState([]);
+
+    const [isLoading, setIsLoading] = useState(false);
+    const [hasMore, setHasMore] = useState(true);
+    const observerTarget = useRef(null);
+    const [initialLoadComplete, setInitialLoadComplete] = useState(false);
 
     const [errorCode, setErrorCode] = useState(null)
 
@@ -41,13 +52,29 @@ const Profile = (props) => {
     const navigate = useNavigate();
 
 
+    const requestHeaders = {};
+    if (BASE_URL.includes("ngrok")) {
+        requestHeaders["ngrok-skip-browser-warning"] = "true";
+    }
+
     useEffect(() => {
-        const requestHeaders = {};
-        if (BASE_URL.includes("ngrok")) {
-            requestHeaders["ngrok-skip-browser-warning"] = "true";
-        }
+        // === שלב 1: איפוס אגרסיבי (Kill Switch) ===
+        // ברגע שהשם בכתובת משתנה, אנחנו מוחקים את הזהות הקודמת
+        setId(null);
+        setPosts([]);
+        setPage(1);
+        setHasMore(true);
+        setInitialLoadComplete(false);
+        setErrorCode(null);
+        window.scrollTo(0, 0);
+
+        // שימוש ב-AbortController לביטול בקשות ישנות אם המשתמש לוחץ מהר
+        const controller = new AbortController();
+
+        console.log(">>> 1. URL Changed. Resetting & Fetching Profile for:", urlUsername);
 
         axios.get(BASE_URL + PROFILE_ENDPOINT, {
+            signal: controller.signal, // מחבר את הביטול לריקווסט
             headers: requestHeaders,
             params: {
                 myUserId: user.id,
@@ -56,31 +83,118 @@ const Profile = (props) => {
             }
         })
             .then((res) => {
-            if (res.data.success){
-                setFirstName(res.data.user.firstName)
-                setLastName(res.data.user.lastName)
-                setUsername(res.data.user.username)
-                setDescription(res.data.user.description)
-                setCity(res.data.user.city)
-                setCountry(res.data.user.country)
-                setId(res.data.user.id)
-                setImageUrl(res.data.user.pictureUrl ? res.data.user.pictureUrl : "https://robohash.org/" + res.data.user.username.charAt(0))
-                setCreatedAt(res.data.user.createdAt)
-                setFollowers(res.data.followersCount)
-                setFollowing(res.data.followingCount)
-                setIsFollowing(res.data.following)
-                setIsLoggedUserProfile(user.id === res.data.user.id)
+                if (res.data.success){
+                    // עדכון כל הנתונים הרגילים...
+                    setFirstName(res.data.user.firstName);
+                    setLastName(res.data.user.lastName);
+                    setUsername(res.data.user.username);
+                    setDescription(res.data.user.description);
+                    setCity(res.data.user.city);
+                    setCountry(res.data.user.country);
+                    setImageUrl(res.data.user.pictureUrl ? res.data.user.pictureUrl : "https://robohash.org/" + res.data.user.username.charAt(0));
+                    setCreatedAt(res.data.user.createdAt);
+                    setFollowers(res.data.followersCount);
+                    setFollowing(res.data.followingCount);
+                    setIsFollowing(res.data.following);
+                    setIsLoggedUserProfile(user.id === res.data.user.id);
+                    setPostCount(res.data.postCount);
 
-            }
-            else {
-                setErrorCode(res.data.errorCode)
+                    // === שלב 2: החייאה ===
+                    // רק עכשיו, כשהכל מוכן, אנחנו נותנים ID חדש.
+                    // זה הטריגר שיפעיל את הפוסטים.
+                    setId(res.data.user.id);
+                }
+                else {
+                    setErrorCode(res.data.errorCode);
+                }
+            })
+            .catch((err)=>{
+                if (axios.isCancel(err)) {
+                    console.log("Request cancelled due to navigation");
+                } else {
+                    console.error(err);
+                }
+            });
+
+        // פונקציית ניקוי: מבטלת את הריקווסט אם המשתמש ברח לפני שזה נגמר
+        return () => controller.abort();
+
+    }, [urlUsername, user]); // תלוי רק בשינוי כתובת
+
+
+    useEffect(() => {
+        // הגנה: אם אין ID (כי אנחנו בשלב האיפוס), אל תעשה כלום!
+        if (!id) return;
+
+        const controller = new AbortController();
+
+        console.log(">>> 2. Fetching posts for Valid ID:", id, "Page:", page);
+
+        setIsLoading(true);
+
+        axios.get(BASE_URL + GET_USER_POSTS_ENDPOINT, {
+            signal: controller.signal,
+            headers: requestHeaders,
+            params: {
+                targetUserId: id,
+                currentUserId: user.id,
+                page: page
             }
         })
-            .catch((err)=>{
-                console.error(err)
-            })
+            .then((res) => {
+                if (res.data.success) {
+                    if (res.data.posts.length === 0) {
+                        setHasMore(false);
+                    }
 
-    }, [urlUsername, user]);
+                    setPosts(prev => {
+                        // אם זה עמוד 1, דורסים. אחרת מוסיפים.
+                        if (page === 1) return [...res.data.posts];
+
+                        // סינון כפילויות ליתר ביטחון
+                        const newPosts = res.data.posts.filter(n => !prev.some(p => p.id === n.id));
+                        return [...prev, ...newPosts];
+                    });
+                }
+            })
+            .catch((err)=>{
+                if (!axios.isCancel(err)) console.error(err);
+            })
+            .finally(() => {
+                // רק אם הריקווסט לא בוטל, נסיים טעינה
+                if (!controller.signal.aborted) {
+                    setIsLoading(false);
+                    setInitialLoadComplete(true);
+                }
+            });
+
+        return () => controller.abort(); // ביטול ריקווסטים ישנים
+
+    }, [id, page]); // רץ רק כשיש ID ופייג'
+
+
+    useEffect(() => {
+        if (!id || !initialLoadComplete) return;
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                if (entries[0].isIntersecting && hasMore && !isLoading && posts.length > 0) {
+                    setPage((prevPage) => prevPage + 1);
+                }
+            },
+            { threshold: 1.0 }
+        );
+
+        if (observerTarget.current) {
+            observer.observe(observerTarget.current);
+        }
+
+        return () => {
+            if (observerTarget.current) {
+                observer.unobserve(observerTarget.current);
+            }
+        };
+    }, [hasMore, isLoading, id, posts.length, initialLoadComplete]);
 
 
 
@@ -99,10 +213,6 @@ const Profile = (props) => {
 
     return (
         <div className={styles.pageWrapper}>
-            {/*<div className={styles.ambientBg}>*/}
-            {/*    <div className={styles.blob1}></div>*/}
-            {/*    <div className={styles.blob2}></div>*/}
-            {/*</div>*/}
             <div className={styles.container}>
 
                 {/* === צד שמאל: פרופיל ומידע (Sticky) === */}
@@ -204,7 +314,7 @@ const Profile = (props) => {
 
                                 {/* Posts - לא לחיץ (נשאר DIV רגיל) */}
                                 <div className={styles.statItem}>
-                                    <span className={styles.statNumber}>89</span>
+                                    <span className={styles.statNumber}>{postCount}</span>
                                     <span className={styles.statLabel}>Posts</span>
                                 </div>
 
@@ -240,181 +350,54 @@ const Profile = (props) => {
                     </div>
                 </aside>
 
-                {/* === צד ימין: ה-Feed === */}
-                <section className={styles.feedSection}>
+                <section className={styles.feedSection} key={id}>
 
-                    {/* גריד הפוסטים */}
                     <div className={styles.postsGrid}>
-
-                        {/* Post 1: Image Heavy */}
-                        <article className={styles.postCard}>
-                            <div className={styles.postHeader}>
-                                <div className={styles.authorInfo}>
-                                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=64" className={styles.authorAvatar} alt="User" />
-                                    <div>
-                                        <h4 className={styles.authorName}>Jane Doe</h4>
-                                        <span className={styles.postTime}>2 hours ago</span>
-                                    </div>
-                                </div>
-                                <button className={styles.moreBtn}>
-                                    <span className="material-symbols-outlined">more_horiz</span>
-                                </button>
-                            </div>
-
-                            <div className={styles.postText}>
-                                Just finished working on a new design system concept. What do you think about these colors? 🎨✨
-                            </div>
-
-                            <div className={styles.postImageContainer}>
-                                <img src="https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&w=800" className={styles.postImage} alt="Post" />
-                            </div>
-
-                            <div className={styles.postFooter}>
-                                <div className={styles.interactions}>
-                                    <button className={`${styles.actionBtn} ${styles.likeBtn}`}>
-                                        <span className="material-symbols-outlined">favorite</span> 243
-                                    </button>
-                                    <button className={styles.actionBtn}>
-                                        <span className="material-symbols-outlined">chat_bubble</span> 18
-                                    </button>
-                                </div>
-                                <button className={styles.actionBtn}>
-                                    <span className="material-symbols-outlined">share</span>
-                                </button>
-                            </div>
-                        </article>
-
-                        {/* Post 2: Quote */}
-                        <article className={styles.postCard}>
-                            <div className={styles.postHeader}>
-                                <div className={styles.authorInfo}>
-                                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=64" className={styles.authorAvatar} alt="User" />
-                                    <div>
-                                        <h4 className={styles.authorName}>Jane Doe</h4>
-                                        <span className={styles.postTime}>5 hours ago</span>
-                                    </div>
-                                </div>
-                                <button className={styles.moreBtn}>
-                                    <span className="material-symbols-outlined">more_horiz</span>
-                                </button>
-                            </div>
-
-                            <div className={styles.quoteContainer}>
-                                <p className={styles.quoteText}>
-                                    "Design is not just what it looks like and feels like. Design is how it works."
-                                </p>
-                            </div>
-                            <div className={styles.quoteAuthor}>— Steve Jobs</div>
-
-                            <div className={styles.postFooter}>
-                                <div className={styles.interactions}>
-                                    <button className={`${styles.actionBtn} ${styles.likeBtn}`}>
-                                        <span className="material-symbols-outlined">favorite</span> 856
-                                    </button>
-                                    <button className={styles.actionBtn}>
-                                        <span className="material-symbols-outlined">chat_bubble</span> 42
-                                    </button>
-                                </div>
-                                <button className={styles.actionBtn}>
-                                    <span className="material-symbols-outlined">bookmark</span>
-                                </button>
-                            </div>
-                        </article>
-
-                        {/* Post 3: Project (Span Two Columns) */}
-                        <article className={`${styles.postCard} ${styles.spanTwo}`}>
-                            <div className={styles.postHeader}>
-                                <div className={styles.authorInfo}>
-                                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=64" className={styles.authorAvatar} alt="User" />
-                                    <div>
-                                        <h4 className={styles.authorName}>Jane Doe</h4>
-                                        <span className={styles.postTime}>1 day ago</span>
-                                    </div>
-                                </div>
-                                <div style={{display: 'flex', gap: '8px', alignItems: 'center'}}>
-                                    <span style={{background: 'rgba(91, 19, 236, 0.1)', color: 'var(--primary)', padding: '2px 8px', borderRadius: '4px', fontSize: '10px', fontWeight: 'bold'}}>PROJECT</span>
-                                    <button className={styles.moreBtn}>
-                                        <span className="material-symbols-outlined">more_horiz</span>
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div className={styles.projectLayout}>
-                                <div className={styles.projectImageWrapper}>
-                                    <img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=800" className={styles.postImage} alt="Project" />
-                                </div>
-                                <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center'}}>
-                                    <h3 className={styles.projectTitle}>Revamping the Dashboard UI</h3>
-                                    <p style={{fontSize: '14px', color: '#d1d5db', lineHeight: '1.6'}}>
-                                        Spent the last weekend optimizing the rendering performance of our main dashboard. Achieved a 40% reduction in load time! 🚀
-                                    </p>
-                                    <div className={styles.projectTags}>
-                                        <span className={styles.tag}>#ReactJS</span>
-                                        <span className={styles.tag}>#Performance</span>
-                                        <span className={styles.tag}>#WebDev</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className={styles.postFooter}>
-                                <div className={styles.interactions}>
-                                    <button className={`${styles.actionBtn} ${styles.likeBtn}`}>
-                                        <span className="material-symbols-outlined">favorite</span> 1.4k
-                                    </button>
-                                    <button className={styles.actionBtn}>
-                                        <span className="material-symbols-outlined">chat_bubble</span> 89
-                                    </button>
-                                </div>
-                                <button className={styles.actionBtn}>
-                                    <span className="material-symbols-outlined">share</span>
-                                </button>
-                            </div>
-                        </article>
-
-                        {/* Post 4: Gallery */}
-                        <article className={styles.postCard}>
-                            <div className={styles.postHeader}>
-                                <div className={styles.authorInfo}>
-                                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=64" className={styles.authorAvatar} alt="User" />
-                                    <div>
-                                        <h4 className={styles.authorName}>Jane Doe</h4>
-                                        <span className={styles.postTime}>3 days ago</span>
-                                    </div>
-                                </div>
-                                <button className={styles.moreBtn}>
-                                    <span className="material-symbols-outlined">more_horiz</span>
-                                </button>
-                            </div>
-
-                            <div className={styles.postText}>
-                                Workspace vibes today. ☕️🎧
-                            </div>
-
-                            <div className={styles.galleryGrid}>
-                                <img src="https://images.unsplash.com/photo-1497215842964-222b430dc094?auto=format&fit=crop&w=400" className={styles.postImage} alt="Workspace" />
-                                <img src="https://images.unsplash.com/photo-1555099962-4199c345e5dd?auto=format&fit=crop&w=400" className={styles.postImage} alt="Code" />
-                            </div>
-
-                            <div className={styles.postFooter}>
-                                <div className={styles.interactions}>
-                                    <button className={`${styles.actionBtn} ${styles.likeBtn}`}>
-                                        <span className="material-symbols-outlined">favorite</span> 512
-                                    </button>
-                                    <button className={styles.actionBtn}>
-                                        <span className="material-symbols-outlined">chat_bubble</span> 34
-                                    </button>
-                                </div>
-                                <button className={styles.actionBtn}>
-                                    <span className="material-symbols-outlined">share</span>
-                                </button>
-                            </div>
-                        </article>
-
+                        {posts.length > 0 &&
+                            posts.map((post) => {
+                                return(
+                                    <Post key={post.id} details={post}/>
+                                )
+                            })
+                        }
                     </div>
 
-                    <div style={{width: '100%', display: 'flex', justifyContent: 'center', padding: '32px'}}>
-                        <span className="material-symbols-outlined" style={{animation: 'spin 1s linear infinite', color: 'var(--primary)', fontSize: '32px'}}>refresh</span>
-                    </div>
+                    {/* === 1. הטוען (Loader) === */}
+                    {hasMore && posts.length > 0 && initialLoadComplete && (
+                        <div
+                            ref={observerTarget}
+                            style={{width: '100%', display: 'flex', justifyContent: 'center', padding: '32px'}}
+                        >
+                            <span
+                                className="material-symbols-outlined"
+                                style={{animation: 'spin 1s linear infinite', color: 'var(--primary)', fontSize: '32px'}}
+                            >
+                                refresh
+                            </span>
+                        </div>
+                    )}
+
+                    {/* === 2. הודעת סיום (יש פוסטים, אבל הגענו לסוף) === */}
+                    {!hasMore && posts.length > 0 && (
+                        <div className={styles.feedMessage}>
+                            <span className="material-symbols-outlined">check_circle</span>
+                            <p>You're all caught up!</p>
+                        </div>
+                    )}
+
+                    {/* === 3. הודעת "אין פוסטים" (ריק לגמרי ולא בטעינה) === */}
+                    {/* הוספנו בדיקה !isLoading כדי שזה לא יהבהב בזמן שטוענים את הראשונים */}
+                    {!hasMore && posts.length === 0 && !isLoading && (
+                        <div className={styles.feedMessage}>
+                            <span className="material-symbols-outlined">post_add</span>
+                            <p>No posts yet</p>
+                            <p style={{fontSize: '12px', opacity: 0.7}}>
+                                {urlUsername === user.username
+                                    ? "Share your first moment with the world."
+                                    : "This user hasn't posted anything yet."}
+                            </p>
+                        </div>
+                    )}
 
                 </section>
 

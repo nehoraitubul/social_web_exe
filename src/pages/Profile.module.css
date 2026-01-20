@@ -389,9 +389,10 @@
 
 /* === פוסטים (Grid) === */
 .postsGrid {
-    display: grid;
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column; /* מסדר אותם אחד מתחת לשני */
     gap: 24px;
+    width: 100%; /* תופס את כל הרוחב הזמין */
 }
 
 @media (min-width: 768px) {
@@ -607,4 +608,35 @@
 
 .likeBtn:hover {
     color: #ec4899; /* Pink */
+}
+
+.feedMessage {
+    width: 100%;
+    padding: 48px 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    color: var(--text-muted);
+    text-align: center;
+    /* אנימציית כניסה עדינה */
+    animation: fadeIn 0.5s ease-out;
+}
+
+.feedMessage span {
+    font-size: 40px;
+    opacity: 0.3; /* שיהיה עדין ברקע */
+    color: var(--text-main);
+}
+
+.feedMessage p {
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
