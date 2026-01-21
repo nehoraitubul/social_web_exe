@@ -46,8 +46,11 @@ const CreatePostModal = ({ onClose }) => {
             })
                 .then((res) =>{
                     if(res.data.success){
-                        console.log(res.data)
                         onClose();
+                        const event = new CustomEvent('new-post-created', {
+                            detail: res.data.post
+                        });
+                        window.dispatchEvent(event);
                     }
                 })
                 .catch((err)=>{

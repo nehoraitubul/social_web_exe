@@ -1,0 +1,293 @@
+/* === Overlay & Modal Container === */
+.overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(22, 16, 34, 0.85);
+    backdrop-filter: blur(8px);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    animation: fadeIn 0.2s ease-out;
+}
+
+.modal {
+    width: 100%;
+    max-width: 700px;
+    height: 90vh;
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-dark);
+    border-radius: 24px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    animation: scaleIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.closeBtn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.3);
+    color: white;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 20;
+    transition: all 0.2s;
+    backdrop-filter: blur(4px);
+}
+
+.closeBtn:hover {
+    background-color: rgba(239, 68, 68, 0.8);
+}
+
+/* === Main Scrollable Area === */
+.scrollContent {
+    flex: 1;
+    overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+.scrollContent::-webkit-scrollbar {
+    display: none;
+}
+
+/* === Post Section === */
+.postWrapper {
+    padding: 24px 24px 0 24px;
+    border-bottom: 1px solid var(--border-dark);
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
+}
+
+.userInfo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(91, 19, 236, 0.1);
+}
+
+.userName {
+    font-size: 16px;
+    font-weight: 700;
+    color: white;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.timestamp {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+/* === Content Types (ADDED FROM POST CSS) === */
+
+/* טקסט רגיל (כשיש גם תמונה) */
+.regularText {
+    font-size: 15px;
+    line-height: 1.6;
+    color: #d1d5db;
+    margin-bottom: 16px;
+}
+
+/* טקסט מיוחד (כשאין תמונה) */
+.fancyTextContainer {
+    margin: 0 0 20px 0; /* מותאם למודל */
+    padding: 40px 30px;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(168, 85, 247, 0.1));
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 180px;
+    border: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.fancyText {
+    font-size: 20px;
+    font-weight: 500;
+    font-style: italic;
+    text-align: center;
+    color: #e5e7eb;
+    line-height: 1.5;
+}
+
+/* === Image Styles === */
+.mediaContainer {
+    width: 100%;
+    height: 400px;
+    background-color: rgba(0, 0, 0, 0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    margin-bottom: 16px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.postImage {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+    display: block;
+    filter: drop-shadow(0 10px 15px rgba(0,0,0,0.3));
+}
+
+/* === Post Actions === */
+.postActions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 16px;
+}
+
+.actionsGroup {
+    display: flex;
+    gap: 20px;
+}
+
+.actionBtn {
+    background: none;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text-muted);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.actionBtn:hover {
+    color: var(--primary);
+}
+
+/* === Like Button Specifics (ADDED) === */
+.likeBtn:hover {
+    color: #ec4899;
+}
+
+/* מצב פעיל (Liked) */
+.liked {
+    color: #ec4899 !important;
+}
+
+.liked .material-symbols-outlined {
+    font-variation-settings: 'FILL' 1;
+    animation: heartPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* === Comments Section === */
+.commentsSection {
+    padding: 24px;
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.commentsTitle {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 20px;
+    letter-spacing: 0.5px;
+}
+
+.commentsList {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* === Fixed Input Footer === */
+.inputSection {
+    padding: 16px 24px;
+    background-color: var(--bg-surface);
+    border-top: 1px solid var(--border-dark);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.inputWrapper {
+    flex: 1;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 24px;
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border: 1px solid transparent;
+    transition: all 0.2s;
+}
+
+.inputWrapper:focus-within {
+    border-color: var(--primary);
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+.emojiBtn {
+    color: var(--text-muted);
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+}
+
+.emojiBtn:hover { color: var(--primary); }
+
+.commentInput {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 14px;
+    outline: none;
+}
+
+.postCommentBtn {
+    color: var(--primary);
+    background: none;
+    border: none;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    padding: 4px 8px;
+}
+
+.postCommentBtn:hover {
+    color: #7c3aed;
+}
+
+/* Animations */
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes scaleIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+@keyframes heartPop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.3); }
+    100% { transform: scale(1); }
+}

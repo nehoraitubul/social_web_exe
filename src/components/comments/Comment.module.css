@@ -1,0 +1,92 @@
+.commentRow {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    width: 100%;
+}
+
+.commentAvatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
+.commentContent {
+    flex: 1;
+    min-width: 0; /* מונע גלישה בתוך פלקס */
+}
+
+.commentBubble {
+    background-color: rgba(255, 255, 255, 0.05); /* התאמה לרקע כהה */
+    border-radius: 16px;
+    border-top-left-radius: 4px; /* עיצוב הבועה */
+    padding: 10px 14px;
+    margin-bottom: 4px;
+    display: inline-block; /* הבועה עוטפת את הטקסט */
+    max-width: 100%;
+}
+
+.commentUser {
+    font-size: 13px;
+    font-weight: 700;
+    color: white;
+    margin: 0 0 2px 0;
+    cursor: pointer;
+}
+
+.commentUser:hover {
+    text-decoration: underline;
+}
+
+.commentText {
+    font-size: 14px;
+    color: #e5e7eb; /* גוון אפור בהיר */
+    line-height: 1.4;
+    margin: 0;
+    word-wrap: break-word; /* שבירת שורות */
+}
+
+.commentMeta {
+    display: flex;
+    gap: 16px;
+    padding-left: 4px;
+    align-items: center;
+}
+
+.metaItem {
+    font-size: 11px;
+    font-weight: 600;
+    color: #9ca3af; /* text-muted */
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    transition: color 0.2s;
+}
+
+.metaItem:hover {
+    color: white;
+}
+
+/* כפתור לייק לתגובה */
+.likeMeta {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
+.likeMeta:hover {
+    color: #ec4899; /* ורוד */
+}
+
+.liked {
+    color: #ec4899 !important;
+}
+
+/* אפקט לחיצה על הלב */
+.liked .material-symbols-outlined {
+    font-variation-settings: 'FILL' 1;
+}

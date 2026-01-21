@@ -5,7 +5,8 @@ import {
     FOLLOWERS_COUNT_ENDPOINT,
     FOLLOWING_COUNT_ENDPOINT, GET_USER_POSTS_ENDPOINT,
     PROFILE_ENDPOINT,
-    UNFOLLOW_USER_ENDPOINT
+    UNFOLLOW_USER_ENDPOINT,
+    TOGGLE_LIKE
 } from "../config/config.js";
 import axios from "axios";
 import {useNavigate, useParams} from "react-router-dom";
@@ -13,6 +14,7 @@ import FollowModal from "../components/modals/FollowModal.jsx";
 import FollowButton from "../components/ui/FollowButton.jsx";
 import {UserContext} from "../context/UserContext.js";
 import Post from "../components/feed/Post.jsx";
+import PostModal from "../components/modals/PostModal.jsx";
 
 const Profile = (props) => {
     const { user } = useContext(UserContext)
@@ -45,6 +47,8 @@ const Profile = (props) => {
     const observerTarget = useRef(null);
     const [initialLoadComplete, setInitialLoadComplete] = useState(false);
 
+    const [selectedPost, setSelectedPost] = useState(null);
+
     const [errorCode, setErrorCode] = useState(null)
 
     //PARAMS (USERNAME)
@@ -71,7 +75,6 @@ const Profile = (props) => {
         // שימוש ב-AbortController לביטול בקשות ישנות אם המשתמש לוחץ מהר
         const controller = new AbortController();
 
-        console.log(">>> 1. URL Changed. Resetting & Fetching Profile for:", urlUsername);
 
         axios.get(BASE_URL + PROFILE_ENDPOINT, {
             signal: controller.signal, // מחבר את הביטול לריקווסט
@@ -123,12 +126,9 @@ const Profile = (props) => {
 
 
     useEffect(() => {
-        // הגנה: אם אין ID (כי אנחנו בשלב האיפוס), אל תעשה כלום!
         if (!id) return;
 
         const controller = new AbortController();
-
-        console.log(">>> 2. Fetching posts for Valid ID:", id, "Page:", page);
 
         setIsLoading(true);
 
@@ -198,6 +198,7 @@ const Profile = (props) => {
 
 
 
+
     const formatedCreatedAt = useMemo(() => {
         if (!createdAt) return "";
 
@@ -210,6 +211,71 @@ const Profile = (props) => {
         return `${month}/${year}`;
     }, [createdAt]);
 
+
+    useEffect(() => {
+        const handleNewPostEvent = (event) => {
+            const newPost = event.detail;
+
+            if (isLoggedUserProfile) {
+
+                setPosts(prev => [newPost, ...prev]);
+
+                setPostCount(prev => prev + 1);
+
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        };
+
+        window.addEventListener('new-post-created', handleNewPostEvent);
+
+        return () => {
+            window.removeEventListener('new-post-created', handleNewPostEvent);
+        };
+    }, [isLoggedUserProfile]);
+
+    const handleDeletePost = (postId) => {
+        setPosts(prevPosts => prevPosts.filter(p => p.id !== postId));
+
+        setPostCount(prev => prev - 1);
+    };
+
+    const handleLikeToggle = (postId) => {
+        const formData = new FormData();
+        formData.append("userId", user.id);
+        formData.append("postId", postId);
+
+        const postHeaders = { "Content-Type": "multipart/form-data" };
+        if (BASE_URL.includes("ngrok")) postHeaders["ngrok-skip-browser-warning"] = "true";
+
+        axios.post(BASE_URL + TOGGLE_LIKE, formData, { headers: postHeaders })
+            .then((res) => {
+                if (res.data.success) {
+                    const isLikedNow = res.data.liked;
+
+                    setPosts(prevPosts => prevPosts.map(post => {
+                        if (post.id === postId) {
+                            return {
+                                ...post,
+                                liked: isLikedNow,
+                                likeCount: isLikedNow ? post.likeCount + 1 : post.likeCount - 1
+                            };
+                        }
+                        return post;
+                    }));
+
+                    if (selectedPost && selectedPost.id === postId) {
+                        setSelectedPost(prev => ({
+                            ...prev,
+                            liked: isLikedNow,
+                            likeCount: isLikedNow ? prev.likeCount + 1 : prev.likeCount - 1
+                        }));
+                    }
+                }
+            })
+            .catch((err) => {
+                console.error(err);
+            });
+    };
 
     return (
         <div className={styles.pageWrapper}>
@@ -356,7 +422,12 @@ const Profile = (props) => {
                         {posts.length > 0 &&
                             posts.map((post) => {
                                 return(
-                                    <Post key={post.id} details={post}/>
+                                    <Post
+                                        key={post.id}
+                                        details={post}
+                                        onDelete={handleDeletePost}
+                                        onCommentClick={() => setSelectedPost(post)}
+                                        onLike={handleLikeToggle}/>
                                 )
                             })
                         }
@@ -425,6 +496,16 @@ const Profile = (props) => {
                     </FollowModal>
                 </>
             )}
+
+            {selectedPost && (
+
+                <PostModal
+                    post={selectedPost}
+                    onClose={() => setSelectedPost(null)}
+                    onLike={handleLikeToggle}
+                />
+            )}
+
         </div>
     );
 };
