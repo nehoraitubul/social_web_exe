@@ -6,7 +6,6 @@ import {UserContext} from "./context/UserContext.js";
 // תפקידה: לקבל אובייקט יוזר ולוודא שיש לו תמונה תקינה
 const normalizeUser = (userData) => {
     if (!userData) return null;
-    console.log(userData.pictureUrl)
 
     // יוצרים עותק כדי לא לשנות את המקור ישירות
     const updatedUser = { ...userData };

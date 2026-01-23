@@ -54,11 +54,25 @@
 .scrollContent {
     flex: 1;
     overflow-y: auto;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
 }
+
 .scrollContent::-webkit-scrollbar {
-    display: none;
+    width: 6px;
+}
+
+.scrollContent::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.scrollContent::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+
+.scrollContent::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 255, 255, 0.3);
 }
 
 /* === Post Section === */
@@ -204,7 +218,6 @@
 /* === Comments Section === */
 .commentsSection {
     padding: 24px;
-    background-color: rgba(0, 0, 0, 0.1);
 }
 
 .commentsTitle {
@@ -238,10 +251,11 @@
     border-radius: 24px;
     padding: 8px 16px;
     display: flex;
-    align-items: center;
+    align-items: flex-end; /* שינוי: מצמיד את הכפתורים לתחתית כשהתיבה גדלה */
     gap: 12px;
     border: 1px solid transparent;
     transition: all 0.2s;
+    min-height: 44px; /* גובה מינימלי */
 }
 
 .inputWrapper:focus-within {
@@ -266,6 +280,34 @@
     color: white;
     font-size: 14px;
     outline: none;
+
+    resize: none;
+    /* שינוי: במקום hidden, אנחנו מאפשרים גלילה אנכית */
+    overflow-y: auto;
+
+    min-height: 20px;
+    max-height: 120px;
+    line-height: 1.5;
+    padding-bottom: 2px;
+    font-family: inherit;
+}
+
+/* === עיצוב סרגל גלילה דק ויפה (רק לתיבת הטקסט) === */
+.commentInput::-webkit-scrollbar {
+    width: 6px; /* דק מאוד */
+}
+
+.commentInput::-webkit-scrollbar-track {
+    background: transparent; /* רקע שקוף */
+}
+
+.commentInput::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.1); /* צבע אפור כהה ועדין */
+    border-radius: 10px; /* פינות עגולות */
+}
+
+.commentInput::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 255, 255, 0.3); /* קצת יותר בהיר כשעוברים עליו */
 }
 
 .postCommentBtn {
@@ -291,3 +333,96 @@
     50% { transform: scale(1.3); }
     100% { transform: scale(1); }
 }
+
+.charCount {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-muted); /* אפור עדין */
+    margin-right: 8px; /* רווח מהכפתור POST */
+    min-width: 45px;   /* שומר מקום קבוע כדי שהכפתור לא יזוז כשמספרים משתנים */
+    text-align: right;
+    font-variant-numeric: tabular-nums; /* גורם למספרים להיות ברוחב אחיד */
+    transition: color 0.2s ease;
+    margin-bottom: 5px;
+}
+
+/* כשהגיעו למקסימום - צובע באדום */
+.limitReached {
+    color: #ef4444; /* Red-500 */
+}
+
+/* עוטף את הכפתור והפופ-אפ כדי שנוכל למקם יחסית אליו */
+.emojiWrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+/* הפופ-אפ עצמו */
+.emojiPopover {
+    position: absolute;
+    bottom: 100%; /* ממקם אותו מעל הכפתור */
+    left: 0;      /* מצמיד אותו לצד שמאל */
+    margin-bottom: 12px; /* רווח קטן מהכפתור */
+    z-index: 2000;
+
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    box-shadow: 0 -10px 40px rgba(0,0,0,0.5); /* צל כלפי מעלה */
+    background-color: #1e1a26; /* surface-dark */
+
+    /* אנימציה קטנה של הופעה מלמטה */
+    animation: popUp 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes popUp {
+    from { opacity: 0; transform: translateY(10px) scale(0.95); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* === Empty State & Loading === */
+.emptyState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    gap: 12px;
+    text-align: center;
+    color: var(--text-muted);
+    animation: fadeIn 0.5s ease-out;
+}
+
+.emptyIcon {
+    font-size: 48px;
+    opacity: 0.2; /* שקוף ועדין */
+    color: white;
+    margin-bottom: 4px;
+}
+
+.emptyTitle {
+    font-size: 15px;
+    font-weight: 600;
+    color: #e5e7eb;
+}
+
+.emptySubtitle {
+    font-size: 13px;
+    opacity: 0.6;
+}
+
+/* Loader פשוט ומרכזי */
+.loaderContainer {
+    display: flex;
+    justify-content: center;
+    padding: 40px;
+}
+
+.spinner {
+    font-size: 28px;
+    color: var(--primary);
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin { 100% { transform: rotate(360deg); } }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }

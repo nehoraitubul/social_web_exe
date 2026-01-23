@@ -277,6 +277,27 @@ const Profile = (props) => {
             });
     };
 
+    const handleCommentAdded = (postId) => {
+
+        // 1. עדכון ברשימת הפוסטים הכללית (כדי שזה יופיע בפיד ברקע)
+        setPosts(prevPosts => prevPosts.map(post => {
+            if (post.id === postId) {
+                return {
+                    ...post,
+                    commentCount: post.commentCount + 1
+                };
+            }
+            return post;
+        }));
+
+        if (selectedPost && selectedPost.id === postId) {
+            setSelectedPost(prev => ({
+                ...prev,
+                commentCount: prev.commentCount + 1
+            }));
+        }
+    };
+
     return (
         <div className={styles.pageWrapper}>
             <div className={styles.container}>
@@ -503,6 +524,7 @@ const Profile = (props) => {
                     post={selectedPost}
                     onClose={() => setSelectedPost(null)}
                     onLike={handleLikeToggle}
+                    onCommentAdded={handleCommentAdded}
                 />
             )}
 

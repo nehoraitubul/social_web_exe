@@ -84,9 +84,10 @@ const CreatePostModal = ({ onClose }) => {
     }
 
     const onEmojiClick = (emojiObject) => {
-        setPostContent(prev => prev + emojiObject.emoji);
+        if (postContent.length + emojiObject.emoji.length <= 500) {
+            setPostContent(prev => prev + emojiObject.emoji);
+        }
     };
-
 
     return (
         <div className={styles.overlay} onClick={onClose}>

@@ -90,3 +90,13 @@
 .liked .material-symbols-outlined {
     font-variation-settings: 'FILL' 1;
 }
+
+.clickable {
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.clickable:hover {
+    opacity: 0.8;
+    text-decoration: underline; /* אופציונלי: קו מתחת לשם בהובר */
+}

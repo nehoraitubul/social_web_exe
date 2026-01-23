@@ -4,10 +4,12 @@ import axios from "axios";
 import {BASE_URL, TOGGLE_LIKE , DELETE_POST_ENDPOINT} from "../../config/config.js";
 import {UserContext} from "../../context/UserContext.js";
 import {formatTimeAgo} from "../../utils/timeUtils.js";
+import {useNavigate} from "react-router-dom";
 
 const Post = (props) => {
     const { user } = useContext(UserContext)
-    const isOwner = user.id === props.details.authorId;
+    const navigate = useNavigate()
+    const isOwner = user.id === props.details.authorId
 
 
     const requestHeaders = {
@@ -26,7 +28,10 @@ const Post = (props) => {
     // בדיקה האם יש טקסט
     const hasText = props.details.content && props.details.content !== "";
 
-
+    const handleProfileClick = (e) => {
+        e.stopPropagation();
+        navigate(`/profile/${props.details.authorUsername}`);
+    };
 
     const relativeTime = formatTimeAgo(props.details.createdAt);
 
@@ -65,10 +70,16 @@ const Post = (props) => {
                     <img
                         src={props.details.authorProfileImage ? props.details.authorProfileImage : "https://robohash.org/" + props.details.authorUsername.charAt(0)}
                         alt={props.details.authorFirstName}
-                        className={styles.avatar}
+                        className={`${styles.avatar} ${styles.clickable}`}
+                        onClick={handleProfileClick}
                     />
                     <div className={styles.userMeta}>
-                        <h4 className={styles.userName}>{props.details.authorFirstName + " " + props.details.authorLastName}</h4>
+                        <h4
+                            className={`${styles.userName} ${styles.clickable}`}
+                            onClick={handleProfileClick}
+                        >
+                            {props.details.authorFirstName + " " + props.details.authorLastName}
+                        </h4>
                         <span className={styles.timestamp}>{relativeTime}</span>
                     </div>
                 </div>

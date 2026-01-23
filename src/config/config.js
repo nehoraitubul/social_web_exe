@@ -19,6 +19,8 @@ export const GET_USER_POSTS_ENDPOINT = "/posts/get-user-posts"
 export const TOGGLE_LIKE = "/like/toggle-like"
 export const DELETE_POST_ENDPOINT = "/posts/delete-post"
 export const GET_POST_COMMENTS_ENDPOINT = "/comment/get-post-comments"
+export const ADD_COMMENT_ENDPOINT = "/comment/add-comment"
+
 
 
 
