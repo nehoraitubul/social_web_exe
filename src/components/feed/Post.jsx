@@ -22,11 +22,10 @@ const Post = (props) => {
 
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-    // בדיקה האם יש תמונה בפוסט הזה
     const hasImage = props.details.pictureUrl && props.details.pictureUrl !== "";
 
-    // בדיקה האם יש טקסט
     const hasText = props.details.content && props.details.content !== "";
+
 
     const handleProfileClick = (e) => {
         e.stopPropagation();

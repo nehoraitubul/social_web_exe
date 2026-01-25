@@ -123,6 +123,11 @@
     line-height: 1.6;
     color: #d1d5db;
     margin-bottom: 16px;
+    white-space: pre-wrap;
+
+    min-width: 0;
+    overflow-wrap: break-word;
+    word-break: break-word;
 }
 
 /* טקסט מיוחד (כשאין תמונה) */
@@ -145,6 +150,11 @@
     text-align: center;
     color: #e5e7eb;
     line-height: 1.5;
+    white-space: pre-wrap;
+
+    min-width: 0;
+    overflow-wrap: break-word;
+    word-break: break-word;
 }
 
 /* === Image Styles === */

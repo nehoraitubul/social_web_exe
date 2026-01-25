@@ -8,6 +8,7 @@ import Register from './pages/Register';
 import Profile from './pages/Profile';
 import EditProfile from "./pages/EditProfile.jsx";
 import {UserProvider} from "./UserProvider.jsx";
+import Feed from "./pages/Feed.jsx";
 
 function App() {
     return (
@@ -25,6 +26,7 @@ function App() {
                     <Route path="/register" element={<Register />} />
                     <Route path="/profile/:username" element={<Profile />} />
                     <Route path="/edit-profile" element={<EditProfile />} />
+                    <Route path="/feed" element={<Feed />} />
                 </Routes>
 
             </main>

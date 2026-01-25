@@ -43,10 +43,11 @@
 
 .commentText {
     font-size: 14px;
-    color: #e5e7eb; /* גוון אפור בהיר */
+    color: #e5e7eb;
     line-height: 1.4;
     margin: 0;
-    word-wrap: break-word; /* שבירת שורות */
+    word-wrap: break-word;
+    white-space: pre-wrap;
 }
 
 .commentMeta {

@@ -312,3 +312,146 @@
     border: 2px solid #161022;
     border-radius: 50%;
 }
+
+/* --- הוספות עבור תוצאות החיפוש --- */
+
+/* חשוב: מוודא שהמיכל הוא יחסי כדי שהתוצאות יתמקמו ביחס אליו */
+.searchContainer {
+    position: relative;
+    /* ... שאר העיצוב הקיים שלך ... */
+}
+
+.searchResultsDropdown {
+    position: absolute;
+    top: 100%; /* מתחיל מיד מתחת לשורת החיפוש */
+    left: 0;
+    width: 100%;
+    background-color: var(--bg-surface); /* או צבע כהה אחר שיש לך */
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    margin-top: 8px;
+    max-height: 300px; /* גלילה אם יש הרבה תוצאות */
+    overflow-y: auto;
+    box-shadow: 0 10px 40px -10px rgba(0,0,0,0.5);
+    z-index: 1000;
+    padding: 8px;
+}
+
+.resultItem {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.resultItem:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.resultAvatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.resultInfo {
+    display: flex;
+    flex-direction: column;
+}
+
+.resultName {
+    font-size: 14px;
+    font-weight: 600;
+    color: white;
+}
+
+.resultUsername {
+    font-size: 12px;
+    color: var(--text-muted); /* או צבע אפור #9ca3af */
+}
+
+.searchMessage {
+    padding: 12px;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 14px;
+}
+
+/* === Main Scrollable Area === */
+.scrollContent {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden; /* מונע גלילה לצדדים אם יש תוכן חורג */
+
+    /* Firefox Support */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+
+/* Navbar.module.css */
+
+/* זה העיצוב של הקופסה עצמה + הסקרולר */
+.searchResultsDropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: var(--bg-surface, #1e1e1e); /* צבע רקע ברירת מחדל אם המשתנה לא קיים */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    margin-top: 8px;
+
+    /* === כאן הגדרות הגלילה === */
+    max-height: 300px; /* הגובה המקסימלי לפני שמתחילה גלילה */
+    overflow-y: auto;  /* מאפשר גלילה */
+    overflow-x: hidden;
+
+    box-shadow: 0 10px 40px -10px rgba(0,0,0,0.5);
+    z-index: 1000;
+    padding: 8px;
+
+    /* עיצוב פס הגלילה - Firefox */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+
+/* עיצוב פס הגלילה - Chrome, Edge, Safari */
+.searchResultsDropdown::-webkit-scrollbar {
+    width: 6px;
+}
+
+.searchResultsDropdown::-webkit-scrollbar-track {
+    background: transparent;
+    margin-block: 4px;
+}
+
+.searchResultsDropdown::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+}
+
+.searchResultsDropdown::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 255, 255, 0.4);
+}
+
+/* שאר העיצובים של הפריטים בתוך הרשימה */
+.resultItem {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.resultItem:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* ... המשך העיצובים שלך (avatar, text וכו')... */

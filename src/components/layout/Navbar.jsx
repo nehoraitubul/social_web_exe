@@ -1,9 +1,11 @@
 import {Link, useNavigate} from 'react-router-dom';
 import Button from '../ui/Button';
 import styles from './Navbar.module.css';
-import {useContext, useState} from "react";
+import {useContext, useState, useEffect} from "react";
 import {UserContext} from "../../context/UserContext.js";
 import CreatePostModal from "../modals/CreatePostModal.jsx";
+import {BASE_URL, SEARCH_USER_ENDPOINT} from "../../config/config.js";
+import axios from "axios";
 
 const Navbar = () => {
     const { user, setUser } = useContext(UserContext);
@@ -11,7 +13,55 @@ const Navbar = () => {
     const [isPostModalOpen, setIsPostModalOpen] = useState(false);
 
     const navigate = useNavigate();
+    const [search, setSearch] = useState("")
+    const [searchResults, setSearchResults] = useState([]);
+    const [isSearching, setIsSearching] = useState(false);
+    const [showResults, setShowResults] = useState(false);
 
+    useEffect(() => {
+        if (search.trim() === "") {
+            setSearchResults([]);
+            setShowResults(false);
+            return;
+        }
+
+        const delayDebounceFn = setTimeout(() => {
+            performSearch();
+        }, 500);
+
+        return () => clearTimeout(delayDebounceFn);
+    }, [search]);
+
+    const performSearch = async () => {
+        setIsSearching(true);
+        setShowResults(true);
+
+        const requestHeaders = {};
+        if (BASE_URL.includes("ngrok")) {
+            requestHeaders["ngrok-skip-browser-warning"] = "true";
+        }
+
+        try {
+            const res = await axios.get(BASE_URL + SEARCH_USER_ENDPOINT, {
+                headers: requestHeaders,
+                params: { query: search }
+            });
+
+            if (res.data.success) {
+                setSearchResults(res.data.userSearchDtos || []);
+            }
+        } catch (err) {
+            console.error("Search failed", err);
+        } finally {
+            setIsSearching(false);
+        }
+    };
+
+    const handleUserClick = (username) => {
+        setSearch("");
+        setShowResults(false);
+        navigate(`/profile/${username}`);
+    };
 
     if (!user.id) {
         return (
@@ -59,7 +109,7 @@ const Navbar = () => {
             <div className={styles.container}>
 
                 {/* צד שמאל: לוגו */}
-                <Link to="/" className={styles.brand}>
+                <div className={styles.brand}>
                     {/* ... ה-SVG נשאר אותו דבר ... */}
                     <div className={styles.logoIcon}>
                         <svg width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -67,7 +117,7 @@ const Navbar = () => {
                         </svg>
                     </div>
                     <h1 className={styles.brandName}>SocialLoop</h1>
-                </Link>
+                </div>
 
                 {/* אמצע: חיפוש (נשאר אותו דבר) */}
                 <div className={styles.searchContainer}>
@@ -75,17 +125,54 @@ const Navbar = () => {
                         <span className={`material-symbols-outlined ${styles.searchIcon}`}>search</span>
                         <input
                             type="text"
+                            value={search}
                             className={styles.searchInput}
-                            placeholder="Search for creators, posts, or tags..."
+                            placeholder="Search users..."
+                            onChange={(e) => setSearch(e.target.value)}
+                            onFocus={() => { if (search) setShowResults(true); }}
+                            onBlur={() => setTimeout(() => setShowResults(false), 200)}
                         />
                     </label>
+
+                    {/* --- דרופ-דאון תוצאות --- */}
+                    {showResults && search.length > 0 && (
+                        <div className={styles.searchResultsDropdown}>
+                            {isSearching ? (
+                                <div className={styles.searchMessage}>Searching...</div>
+                            ) : searchResults.length > 0 ? (
+                                searchResults.map((resultUser) => (
+                                    <div
+                                        key={resultUser.id}
+                                        className={styles.resultItem}
+                                        onClick={() => handleUserClick(resultUser.username)}
+                                    >
+                                        <img
+                                            src={resultUser.pictureUrl || "https://robohash.org/" + resultUser.username.charAt(0)}
+                                            alt={resultUser.username}
+                                            className={styles.resultAvatar}
+                                        />
+                                        <div className={styles.resultInfo}>
+                                            <span className={styles.resultName}>
+                                                {resultUser.firstName} {resultUser.lastName}
+                                            </span>
+                                            <span className={styles.resultUsername}>
+                                                @{resultUser.username}
+                                            </span>
+                                        </div>
+                                    </div>
+                                ))
+                            ) : (
+                                <div className={styles.searchMessage}>No users found</div>
+                            )}
+                        </div>
+                    )}
                 </div>
 
                 {/* צד ימין: פעולות */}
                 <div className={styles.actions}>
 
                     {/* כפתור הבית - הפכתי ל-Link */}
-                    <Link to="/" className={styles.homeBtn} title="Home">
+                    <Link to="/feed" className={styles.homeBtn} title="Home">
                         <span className="material-symbols-outlined" style={{ fontSize: '24px' }}>home</span>
                     </Link>
 

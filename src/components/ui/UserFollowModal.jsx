@@ -11,7 +11,6 @@ const UserFollowModal = (props) => {
     const [isFollow, setIsFollow] = useState(props.isFollow);
     const [isVisible, setIsVisible] = useState(true)
 
-    // סטייט חדש לשליטה על הפופ-אפ של ההסרה
     const [showRemoveConfirm, setShowRemoveConfirm] = useState(false);
 
     const navigate = useNavigate();
@@ -62,6 +61,8 @@ const UserFollowModal = (props) => {
 
         setShowRemoveConfirm(false);
     }
+
+
 
     if (!isVisible) return null
 

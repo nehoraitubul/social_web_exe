@@ -15,6 +15,7 @@ import FollowButton from "../components/ui/FollowButton.jsx";
 import {UserContext} from "../context/UserContext.js";
 import Post from "../components/feed/Post.jsx";
 import PostModal from "../components/modals/PostModal.jsx";
+import {likeToggleRequest} from "../services/LikeRequest.js";
 
 const Profile = (props) => {
     const { user } = useContext(UserContext)
@@ -62,8 +63,6 @@ const Profile = (props) => {
     }
 
     useEffect(() => {
-        // === שלב 1: איפוס אגרסיבי (Kill Switch) ===
-        // ברגע שהשם בכתובת משתנה, אנחנו מוחקים את הזהות הקודמת
         setId(null);
         setPosts([]);
         setPage(1);
@@ -72,12 +71,11 @@ const Profile = (props) => {
         setErrorCode(null);
         window.scrollTo(0, 0);
 
-        // שימוש ב-AbortController לביטול בקשות ישנות אם המשתמש לוחץ מהר
         const controller = new AbortController();
 
 
         axios.get(BASE_URL + PROFILE_ENDPOINT, {
-            signal: controller.signal, // מחבר את הביטול לריקווסט
+            signal: controller.signal,
             headers: requestHeaders,
             params: {
                 myUserId: user.id,
@@ -87,7 +85,6 @@ const Profile = (props) => {
         })
             .then((res) => {
                 if (res.data.success){
-                    // עדכון כל הנתונים הרגילים...
                     setFirstName(res.data.user.firstName);
                     setLastName(res.data.user.lastName);
                     setUsername(res.data.user.username);
@@ -101,10 +98,6 @@ const Profile = (props) => {
                     setIsFollowing(res.data.following);
                     setIsLoggedUserProfile(user.id === res.data.user.id);
                     setPostCount(res.data.postCount);
-
-                    // === שלב 2: החייאה ===
-                    // רק עכשיו, כשהכל מוכן, אנחנו נותנים ID חדש.
-                    // זה הטריגר שיפעיל את הפוסטים.
                     setId(res.data.user.id);
                 }
                 else {
@@ -119,10 +112,9 @@ const Profile = (props) => {
                 }
             });
 
-        // פונקציית ניקוי: מבטלת את הריקווסט אם המשתמש ברח לפני שזה נגמר
         return () => controller.abort();
 
-    }, [urlUsername, user]); // תלוי רק בשינוי כתובת
+    }, [urlUsername, user]);
 
 
     useEffect(() => {
@@ -148,10 +140,8 @@ const Profile = (props) => {
                     }
 
                     setPosts(prev => {
-                        // אם זה עמוד 1, דורסים. אחרת מוסיפים.
                         if (page === 1) return [...res.data.posts];
 
-                        // סינון כפילויות ליתר ביטחון
                         const newPosts = res.data.posts.filter(n => !prev.some(p => p.id === n.id));
                         return [...prev, ...newPosts];
                     });
@@ -161,16 +151,15 @@ const Profile = (props) => {
                 if (!axios.isCancel(err)) console.error(err);
             })
             .finally(() => {
-                // רק אם הריקווסט לא בוטל, נסיים טעינה
                 if (!controller.signal.aborted) {
                     setIsLoading(false);
                     setInitialLoadComplete(true);
                 }
             });
 
-        return () => controller.abort(); // ביטול ריקווסטים ישנים
+        return () => controller.abort();
 
-    }, [id, page]); // רץ רק כשיש ID ופייג'
+    }, [id, page]);
 
 
     useEffect(() => {
@@ -239,47 +228,34 @@ const Profile = (props) => {
         setPostCount(prev => prev - 1);
     };
 
-    const handleLikeToggle = (postId) => {
-        const formData = new FormData();
-        formData.append("userId", user.id);
-        formData.append("postId", postId);
+    const handleLikeToggle = async (postId) => {
+        const response = await likeToggleRequest(postId, user.id)
+        if (response && response.success) {
+            const isLikedNow = response.liked;
 
-        const postHeaders = { "Content-Type": "multipart/form-data" };
-        if (BASE_URL.includes("ngrok")) postHeaders["ngrok-skip-browser-warning"] = "true";
-
-        axios.post(BASE_URL + TOGGLE_LIKE, formData, { headers: postHeaders })
-            .then((res) => {
-                if (res.data.success) {
-                    const isLikedNow = res.data.liked;
-
-                    setPosts(prevPosts => prevPosts.map(post => {
-                        if (post.id === postId) {
-                            return {
-                                ...post,
-                                liked: isLikedNow,
-                                likeCount: isLikedNow ? post.likeCount + 1 : post.likeCount - 1
-                            };
-                        }
-                        return post;
-                    }));
-
-                    if (selectedPost && selectedPost.id === postId) {
-                        setSelectedPost(prev => ({
-                            ...prev,
-                            liked: isLikedNow,
-                            likeCount: isLikedNow ? prev.likeCount + 1 : prev.likeCount - 1
-                        }));
-                    }
+            setPosts(prevPosts => prevPosts.map(post => {
+                if (post.id === postId) {
+                    return {
+                        ...post,
+                        liked: isLikedNow,
+                        likeCount: isLikedNow ? post.likeCount + 1 : post.likeCount - 1
+                    };
                 }
-            })
-            .catch((err) => {
-                console.error(err);
-            });
+                return post;
+            }));
+
+            if (selectedPost && selectedPost.id === postId) {
+                setSelectedPost(prev => ({
+                    ...prev,
+                    liked: isLikedNow,
+                    likeCount: isLikedNow ? prev.likeCount + 1 : prev.likeCount - 1
+                }));
+            }
+        }
     };
 
     const handleCommentAdded = (postId) => {
 
-        // 1. עדכון ברשימת הפוסטים הכללית (כדי שזה יופיע בפיד ברקע)
         setPosts(prevPosts => prevPosts.map(post => {
             if (post.id === postId) {
                 return {

@@ -80,18 +80,14 @@ const EditProfile = () => {
 
 
     const handleImageChange = (event) => {
-        const file = event.target.files[0]; // לוקחים את הקובץ הראשון שנבחר
+        const file = event.target.files[0];
         if (file) {
-            setProfileImageFile(file); // שומרים את הקובץ לשליחה עתידית
-
-            // יצירת URL זמני לתצוגה מקדימה (Preview)
-            // זה גורם לתמונה להתחלף מיד על המסך בלי לחכות לשרת
+            setProfileImageFile(file);
             const previewUrl = URL.createObjectURL(file);
             setImageUrl(previewUrl);
         }
     };
 
-    // פונקציה שמדמה לחיצה על האינפוט הנסתר
     const handleAvatarClick = () => {
         fileInputRef.current.click();
     }
@@ -138,10 +134,10 @@ const EditProfile = () => {
                             {/* 2. האינפוט הנסתר - זה הטריק! */}
                             <input
                                 type="file"
-                                ref={fileInputRef}           // חיבור ל-useRef
-                                onChange={handleImageChange} // מה קורה כשבוחרים קובץ
-                                style={{ display: 'none' }}  // שלא יראו אותו
-                                accept="image/*"             // מקבל רק תמונות
+                                ref={fileInputRef}
+                                onChange={handleImageChange}
+                                style={{ display: 'none' }}
+                                accept="image/*"
                             />
 
                         </div>

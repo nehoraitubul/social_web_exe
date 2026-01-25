@@ -122,6 +122,11 @@
     font-size: 15px;
     line-height: 1.6;
     color: #d1d5db;
+    white-space: pre-wrap;
+
+    min-width: 0;
+    overflow-wrap: break-word;
+    word-break: break-word;
 }
 
 .fancyTextContainer {
@@ -143,38 +148,36 @@
     text-align: center;
     color: #e5e7eb;
     line-height: 1.5;
+    white-space: pre-wrap;
+
+    min-width: 0;
+    overflow-wrap: break-word;
+    word-break: break-word;
 }
 
 /* === Media / Image Updates - PROFESSIONAL COMPACT VERSION === */
 .mediaContainer {
     width: 100%;
-    /* קובעים גובה קבוע למיכל! זה המפתח למניעת "בומבסטיות".
-       400px זה גובה מעולה שנותן נוכחות אבל משאיר מקום לעוד פוסטים במסך. */
     height: 400px;
 
-    /* רקע כהה עדין שמשתלב טוב יותר מהשחור המוחלט */
     background-color: rgba(0, 0, 0, 0.2);
     display: flex;
     justify-content: center;
     align-items: center;
     overflow: hidden;
     margin-top: 12px;
-    /* עיגול פינות עדין פנימי לתמונה - נראה מאוד מודרני */
     border-radius: 8px;
     border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .postImage {
-    /* התמונה תנסה למלא את ה-400px שהגדרנו */
     width: 100%;
     height: 100%;
 
-    /* שומר על האיכות ולא חותך! אם התמונה לא בפרופורציה, ייווצרו שוליים שקופים בצדדים */
     object-fit: contain;
     object-position: center;
     display: block;
 
-    /* טאץ' מקצועי: צל עדין שנותן לתמונה עומק וגורם לה "לצוף" קצת בתוך הקונטיינר */
     filter: drop-shadow(0 10px 15px rgba(0,0,0,0.3));
 }
 

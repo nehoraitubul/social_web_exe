@@ -7,7 +7,7 @@ const Comment = ({ data , onClose}) => {
 
     const timeAgo = formatTimeAgo(data.createdAt);
 
-    const profileImage = data.authorProfileImage ? data.authorProfileImage : `https://robohash.org/${data.authorUsername}?set=set4`;
+    const profileImage = data.authorProfileImage ? data.authorProfileImage : "https://robohash.org/" + data.authorUsername.charAt(0);
 
     const handleProfileClick = (e) => {
         e.stopPropagation();

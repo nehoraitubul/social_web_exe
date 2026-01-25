@@ -20,6 +20,10 @@ export const TOGGLE_LIKE = "/like/toggle-like"
 export const DELETE_POST_ENDPOINT = "/posts/delete-post"
 export const GET_POST_COMMENTS_ENDPOINT = "/comment/get-post-comments"
 export const ADD_COMMENT_ENDPOINT = "/comment/add-comment"
+export const SEARCH_USER_ENDPOINT = "/search"
+export const GET_USER_FEED_ENDPOINT = "/posts/get-feed"
+
+
 
 
 

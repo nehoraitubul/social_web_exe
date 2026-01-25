@@ -89,6 +89,7 @@ const CreatePostModal = ({ onClose }) => {
         }
     };
 
+
     return (
         <div className={styles.overlay} onClick={onClose}>
 
@@ -125,7 +126,7 @@ const CreatePostModal = ({ onClose }) => {
               placeholder={`What's on your mind, ${user.firstName}?`}
               value={postContent}
               onChange={e => {
-                  if (e.target.textLength <= 500){
+                  if (e.target.value.length <= 500){
                       setPostContent(e.target.value)
                   }
               }}

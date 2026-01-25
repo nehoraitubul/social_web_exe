@@ -1,0 +1,307 @@
+.pageWrapper {
+    width: 100%;
+    min-height: 100vh;
+    color: var(--text-main);
+    display: flex;
+    justify-content: center;
+    padding-top: 20px; /* מרווח מהנאבבר */
+}
+
+.container {
+    width: 100%;
+    max-width: 1050px; /* רוחב מעט צר יותר מהפרופיל כדי שיהיה ממוקד */
+    display: flex;
+    gap: 30px;
+    padding: 0 16px;
+    position: relative;
+}
+
+/* === Main Content (Center) === */
+.mainContent {
+    flex: 1;
+    max-width: 640px; /* הרוחב של הפיד עצמו */
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* === Create Post Widget === */
+.createPostCard {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 16px;
+    display: flex;
+    gap: 16px;
+}
+
+.currentUserAvatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(91, 19, 236, 0.1);
+}
+
+.inputSection {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.postInput {
+    width: 100%;
+    background: transparent;
+    border: none;
+    resize: none;
+    font-size: 18px;
+    color: var(--text-main);
+    outline: none;
+    min-height: 60px;
+    font-family: inherit;
+}
+
+.postInput::placeholder {
+    color: var(--text-muted);
+}
+
+.divider {
+    height: 1px;
+    background-color: var(--border-color);
+    width: 100%;
+}
+
+.actionsRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.mediaButtons {
+    display: flex;
+    gap: 8px;
+}
+
+.mediaBtn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    background: transparent;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.mediaBtn:hover {
+    background-color: rgba(91, 19, 236, 0.1);
+}
+
+.postBtn {
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    padding: 8px 24px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.postBtn:hover {
+    opacity: 0.9;
+}
+
+/* === Right Sidebar === */
+.rightSidebar {
+    width: 320px;
+    flex-shrink: 0;
+    /* Sticky Magic */
+    position: sticky;
+    top: 90px; /* מתחשב בגובה הנאבבר */
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* מסתיר את הצד במסכים קטנים */
+@media (max-width: 900px) {
+    .rightSidebar {
+        display: none;
+    }
+}
+
+/* === Search Bar === */
+.searchWrapper {
+    position: relative;
+    width: 100%;
+}
+
+.searchIcon {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    font-size: 20px;
+}
+
+.searchInput {
+    width: 100%;
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: 24px;
+    padding: 12px 16px 12px 48px; /* מקום לאייקון */
+    color: var(--text-main);
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.searchInput:focus {
+    border-color: var(--primary);
+}
+
+/* === Suggestions Box === */
+.suggestionsCard {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 20px;
+}
+
+.cardTitle {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: var(--text-main);
+}
+
+.suggestionList {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.userRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.userDetails {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.smallAvatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.texts {
+    display: flex;
+    flex-direction: column;
+}
+
+.name {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.username {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.followBtnSmall {
+    background-color: white;
+    color: black;
+    border: none;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.followBtnSmall:hover {
+    opacity: 0.9;
+}
+
+.showMore {
+    display: block;
+    margin-top: 16px;
+    font-size: 12px;
+    color: var(--primary);
+    cursor: pointer;
+    background: none;
+    border: none;
+}
+
+/* === Footer Links === */
+.footerLinks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 0 8px;
+}
+
+.footerLink {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-decoration: none;
+    text-transform: uppercase;
+    font-weight: 500;
+}
+
+.footerLink:hover {
+    color: var(--primary);
+}
+
+.feedMessage {
+    width: 100%;
+    padding: 48px 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    color: var(--text-muted);
+    text-align: center;
+    /* אנימציית כניסה עדינה */
+    animation: fadeIn 0.5s ease-out;
+}
+
+.feedMessage span {
+    font-size: 40px;
+    opacity: 0.3; /* שיהיה עדין ברקע */
+    color: var(--text-main);
+}
+
+.feedMessage p {
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.feedStream {
+    flex: 1;
+    min-width: 0;
+}
