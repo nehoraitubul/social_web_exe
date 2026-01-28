@@ -12,7 +12,7 @@ const normalizeUser = (userData) => {
 
     // הלוגיקה: אם אין URL או שהוא ריק, מייצרים רובוט לפי האות הראשונה של השם משתמש
     if (!updatedUser.pictureUrl || updatedUser.pictureUrl.trim() === "") {
-        const firstChar = updatedUser.username ? updatedUser.username.charAt(0) : "U";
+        const firstChar = updatedUser.username ? updatedUser.username : "U";
         updatedUser.pictureUrl = `https://robohash.org/${firstChar}`;
     }
 

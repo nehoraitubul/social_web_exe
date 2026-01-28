@@ -16,6 +16,7 @@ import {UserContext} from "../context/UserContext.js";
 import Post from "../components/feed/Post.jsx";
 import PostModal from "../components/modals/PostModal.jsx";
 import {likeToggleRequest} from "../services/LikeRequest.js";
+import MutualFollowers from "../components/profile/MutualFollowers.jsx";
 
 const Profile = (props) => {
     const { user } = useContext(UserContext)
@@ -34,6 +35,7 @@ const Profile = (props) => {
     const [following, setFollowing] = useState(0);
     const [followers, setFollowers] = useState(0);
     const [postCount, setPostCount] = useState(0)
+    const [mutualFollowers, setMutualFollowers] = useState([])
 
     const [isFollowersOpen, setIsFollowerOpen] = useState(false)
     const [isFollowingModal, setIsFollowingModal] = useState(true);
@@ -91,13 +93,14 @@ const Profile = (props) => {
                     setDescription(res.data.user.description);
                     setCity(res.data.user.city);
                     setCountry(res.data.user.country);
-                    setImageUrl(res.data.user.pictureUrl ? res.data.user.pictureUrl : "https://robohash.org/" + res.data.user.username.charAt(0));
+                    setImageUrl(res.data.user.pictureUrl ? res.data.user.pictureUrl : "https://robohash.org/" + res.data.user.username);
                     setCreatedAt(res.data.user.createdAt);
                     setFollowers(res.data.followersCount);
                     setFollowing(res.data.followingCount);
                     setIsFollowing(res.data.following);
                     setIsLoggedUserProfile(user.id === res.data.user.id);
                     setPostCount(res.data.postCount);
+                    setMutualFollowers(res.data.mutualFollowers || []);
                     setId(res.data.user.id);
                 }
                 else {
@@ -399,16 +402,12 @@ const Profile = (props) => {
                                 <span style={{fontSize: '14px'}}>Joined at {formatedCreatedAt}</span>
                             </div>
 
-                            <div className={styles.mutualFriends}>
-                                <h4 className={styles.sectionTitle} style={{fontSize: '12px', marginBottom: '12px'}}>Mutual Followers</h4>
-                                <div className={styles.avatarsGroup}>
-                                    <img src="https://i.pravatar.cc/100?img=11" className={styles.friendAvatar} alt="Friend" />
-                                    <img src="https://i.pravatar.cc/100?img=12" className={styles.friendAvatar} alt="Friend" />
-                                    <img src="https://i.pravatar.cc/100?img=13" className={styles.friendAvatar} alt="Friend" />
-                                    <div className={styles.moreFriends}>+5</div>
-                                </div>
-                            </div>
+                            {!isLoggedUserProfile && (
+                                <MutualFollowers users={mutualFollowers} />
+                            )}
+
                         </div>
+
 
                     </div>
                 </aside>

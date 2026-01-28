@@ -135,7 +135,7 @@ const PostModal = ({ onClose, post , onLike, onCommentAdded}) => {
 
                         <div className={styles.header}>
                             <div className={styles.userInfo}>
-                                <img src={post.authorProfileImage ? post.authorProfileImage : "https://robohash.org/" + post.authorUsername.charAt(0)} alt="User" className={styles.avatar} />
+                                <img src={post.authorProfileImage ? post.authorProfileImage : "https://robohash.org/" + post.authorUsername} alt="User" className={styles.avatar} />
                                 <div>
                                     <h4 className={styles.userName}>{post.authorFirstName + " " + post.authorLastName}</h4>
                                     <span className={styles.timestamp}>@{post.authorUsername} • {relativeTime}</span>

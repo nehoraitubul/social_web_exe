@@ -122,7 +122,7 @@
     width: 320px;
     flex-shrink: 0;
     /* Sticky Magic */
-    position: sticky;
+
     top: 90px; /* מתחשב בגובה הנאבבר */
     height: fit-content;
     display: flex;
@@ -187,57 +187,6 @@
     display: flex;
     flex-direction: column;
     gap: 16px;
-}
-
-.userRow {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.userDetails {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.smallAvatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    object-fit: cover;
-}
-
-.texts {
-    display: flex;
-    flex-direction: column;
-}
-
-.name {
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--text-main);
-}
-
-.username {
-    font-size: 12px;
-    color: var(--text-muted);
-}
-
-.followBtnSmall {
-    background-color: white;
-    color: black;
-    border: none;
-    padding: 6px 16px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: opacity 0.2s;
-}
-
-.followBtnSmall:hover {
-    opacity: 0.9;
 }
 
 .showMore {

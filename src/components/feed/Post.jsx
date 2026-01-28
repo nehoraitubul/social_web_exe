@@ -1,5 +1,5 @@
 import styles from './Post.module.css';
-import {useContext, useState} from "react";
+import {useContext, useEffect, useRef, useState} from "react";
 import axios from "axios";
 import {BASE_URL, TOGGLE_LIKE , DELETE_POST_ENDPOINT} from "../../config/config.js";
 import {UserContext} from "../../context/UserContext.js";
@@ -10,6 +10,8 @@ const Post = (props) => {
     const { user } = useContext(UserContext)
     const navigate = useNavigate()
     const isOwner = user.id === props.details.authorId
+
+    const menuRef = useRef(null);
 
 
     const requestHeaders = {
@@ -59,6 +61,19 @@ const Post = (props) => {
             });
     };
 
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (menuRef.current && !menuRef.current.contains(event.target)) {
+                setIsMenuOpen(false);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
+
     return (
         <article className={styles.card}>
 
@@ -67,7 +82,7 @@ const Post = (props) => {
                 <div className={styles.userInfo}>
                     {/* תמונת פרופיל של כותב הפוסט */}
                     <img
-                        src={props.details.authorProfileImage ? props.details.authorProfileImage : "https://robohash.org/" + props.details.authorUsername.charAt(0)}
+                        src={props.details.authorProfileImage ? props.details.authorProfileImage : "https://robohash.org/" + props.details.authorUsername}
                         alt={props.details.authorFirstName}
                         className={`${styles.avatar} ${styles.clickable}`}
                         onClick={handleProfileClick}
@@ -85,7 +100,7 @@ const Post = (props) => {
 
                 {/* כפתור שלוש נקודות + דרופ-דאון */}
                 {isOwner && (
-                    <div className={styles.menuWrapper}>
+                    <div className={styles.menuWrapper} ref={menuRef}>
                         <button
                             className={styles.moreBtn}
                             onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -93,7 +108,6 @@ const Post = (props) => {
                             <span className="material-symbols-outlined">more_horiz</span>
                         </button>
 
-                        {/* התפריט שנפתח */}
                         {isMenuOpen && (
                             <div className={styles.menuDropdown}>
                                 <button

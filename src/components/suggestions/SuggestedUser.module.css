@@ -1,0 +1,80 @@
+.userRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.userDetails {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    /* === תוספות ללינק === */
+    text-decoration: none; /* ביטול קו תחתון */
+    color: inherit;        /* שהטקסט לא יהפוך לכחול */
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.userDetails:hover {
+    opacity: 0.8; /* אפקט עדין כשעוברים על השם/תמונה */
+}
+
+.smallAvatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.texts {
+    display: flex;
+    flex-direction: column;
+}
+
+.name {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.username {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.followBtnSmall {
+    background-color: white;
+    color: black;
+    border: none;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+
+.followBtnSmall:hover {
+    opacity: 0.9;
+}
+
+/* העיצוב הרגיל (סגול) - כבר קיים אצלך */
+.followBtnSmall {
+    /* ...העיצוב הקיים שלך... */
+    transition: all 0.2s ease;
+}
+
+.followBtnSmall[data-following="true"] {
+    background-color: transparent;      /* רקע שקוף */
+    border: 1px solid rgba(255, 255, 255, 0.3); /* מסגרת לבנה עדינה וחצי שקופה */
+    color: rgba(255, 255, 255, 0.7);    /* טקסט לבן מעט עמום */
+}
+
+/* בהובר - הופך לאדום כדי להזהיר שמדובר בהסרה */
+.followBtnSmall[data-following="true"]:hover {
+    border-color: #ba4444;              /* מסגרת אדומה */
+    color: #ba4444;                     /* טקסט אדום */
+    background-color: rgba(232, 75, 75, 0.1); /* רקע אדמדם שקוף */
+}

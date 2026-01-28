@@ -1,4 +1,4 @@
-/* העטיפה הראשית - נשארת דבוקה למעלה */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@700;800&display=swap'); /* העטיפה הראשית - נשארת דבוקה למעלה */
 .header {
     position: sticky;
     top: 0;
@@ -121,11 +121,25 @@
     transform: scale(1.05);
 }
 
+/* Navbar.module.css */
+
+
 .brandName {
+    /* === הפונט החדש === */
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 800; /* עובי מקסימלי */
     font-size: 24px;
-    font-weight: 700;
-    color: white; /* תיקון: טקסט לבן */
-    letter-spacing: -0.5px;
+    letter-spacing: -1px; /* צפיפות קלה למראה מודרני */
+
+    /* === צבע === */
+    color: white;
+
+    /* אופציונלי: אם אתה רוצה את הגרדיאנט הסגול-לבן גם על הטקסט */
+    /*
+    background: linear-gradient(90deg, #fff 0%, #a78bfa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    */
 }
 
 /* === אמצע: חיפוש === */

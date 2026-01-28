@@ -69,16 +69,15 @@ const Navbar = () => {
                 <div className={styles.container}>
 
                     {/* צד שמאל: לוגו */}
+                    {/* צד שמאל: לוגו (למשתמש לא מחובר) */}
                     <Link to="/" className={styles.logoLink}>
-                        <a href="#" className={styles.brand}>
-                            <div className={styles.logoIcon}>
-                                {/* SVG של הלוגו */}
-                                <svg width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M4 4H17.3334V17.3334H30.6666V30.6666H44V44H4V4Z" fill="currentColor"/>
-                                </svg>
-                            </div>
-                            <h1 className={styles.brandName}>SocialLoop</h1>
-                        </a>
+                        {/* הורדתי את ה- <a href> */}
+                        <div className={styles.logoIcon}>
+                            <svg width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M4 4H17.3334V17.3334H30.6666V30.6666H44V44H4V4Z" fill="currentColor"/>
+                            </svg>
+                        </div>
+                        <h1 className={styles.brandName}>Clusters</h1>
                     </Link>
 
                     {/* צד ימין: כפתורים */}
@@ -109,15 +108,14 @@ const Navbar = () => {
             <div className={styles.container}>
 
                 {/* צד שמאל: לוגו */}
-                <div className={styles.brand}>
-                    {/* ... ה-SVG נשאר אותו דבר ... */}
+                <Link to="/feed" className={styles.brand}>
                     <div className={styles.logoIcon}>
                         <svg width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M4 4H17.3334V17.3334H30.6666V30.6666H44V44H4V4Z" fill="currentColor"/>
                         </svg>
                     </div>
-                    <h1 className={styles.brandName}>SocialLoop</h1>
-                </div>
+                    <h1 className={styles.brandName}>Clusters</h1>
+                </Link>
 
                 {/* אמצע: חיפוש (נשאר אותו דבר) */}
                 <div className={styles.searchContainer}>
@@ -147,7 +145,7 @@ const Navbar = () => {
                                         onClick={() => handleUserClick(resultUser.username)}
                                     >
                                         <img
-                                            src={resultUser.pictureUrl || "https://robohash.org/" + resultUser.username.charAt(0)}
+                                            src={resultUser.pictureUrl || "https://robohash.org/" + resultUser.username}
                                             alt={resultUser.username}
                                             className={styles.resultAvatar}
                                         />

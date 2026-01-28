@@ -83,7 +83,7 @@ const FollowModal = ({ onClose, isFollowingModal, targetUserId, onSuccess, isFol
                                 <UserFollowModal
                                     firstName ={user.user.firstName}
                                     lastName = {user.user.lastName}
-                                    image = {user.user.pictureUrl ? user.user.pictureUrl : "https://robohash.org/" + user.user.username.charAt(0)}
+                                    image = {user.user.pictureUrl ? user.user.pictureUrl : "https://robohash.org/" + user.user.username}
                                     username = {user.user.username}
                                     isFollow = {user.isFollowing}
                                     onClose = {onClose}

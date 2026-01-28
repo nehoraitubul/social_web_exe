@@ -4,7 +4,7 @@ import axios from "axios";
 import {UserContext} from "../../context/UserContext.js";
 
 
-const FollowButton = ({ targetUserId, initialIsFollow, onSuccess, className, followContent = "Follow",unfollowContent = "Unfollow"}) => {
+const FollowButton = ({ targetUserId, initialIsFollow, onSuccess, className, followContent = "Follow", unfollowContent = "Unfollow"}) => {
     const { user, setUser } = useContext(UserContext)
 
     const [isFollow, setIsFollow] = useState(initialIsFollow);
@@ -56,6 +56,7 @@ const FollowButton = ({ targetUserId, initialIsFollow, onSuccess, className, fol
             className={className}
             onClick={handleClick}
             disabled={isLoading}
+            data-following={isFollow}
         >
             {isLoading ? "..." : (isFollow ? unfollowContent : followContent)}
         </button>

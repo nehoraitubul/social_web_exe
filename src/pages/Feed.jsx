@@ -6,12 +6,15 @@ import axios from "axios";
 import Post from "../components/feed/Post.jsx";
 import {likeToggleRequest} from "../services/LikeRequest.js";
 import PostModal from "../components/modals/PostModal.jsx";
+import SuggestedUser from "../components/suggestions/SuggestedUser.jsx";
+import {Link} from "react-router-dom";
 
 const Feed = () => {
     const { user } = useContext(UserContext);
 
     const [page, setPage] = useState(1);
     const [posts, setPosts] = useState([]);
+    const [suggestedUsers, setSuggestedUsers] = useState([])
 
 
     const [isLoading, setIsLoading] = useState(false);
@@ -42,6 +45,9 @@ const Feed = () => {
                 if (res.data.success){
                     if (res.data.posts.length === 0) {
                         setHasMore(false);
+                    }
+                    if (res.data.suggestions && res.data.suggestions.length > 0) {
+                        setSuggestedUsers(res.data.suggestions)
                     }
 
                     setPosts(prev => {
@@ -133,14 +139,9 @@ const Feed = () => {
         }
     };
 
-
-
-
-    const suggestedUsers = [
-        { name: "Mark Davis", username: "markd", img: "https://i.pravatar.cc/150?u=mark" },
-        { name: "Elena Rodriguez", username: "elenadev", img: "https://i.pravatar.cc/150?u=elena" },
-        { name: "James Wilson", username: "jwilson", img: "https://i.pravatar.cc/150?u=james" },
-    ];
+    const handleDeletePost = (postId) => {
+        setPosts(prevPosts => prevPosts.filter(p => p.id !== postId));
+    };
 
 
     return (
@@ -159,7 +160,8 @@ const Feed = () => {
                                         key={post.id}
                                         details={post}
                                         onCommentClick={() => setSelectedPost(post)}
-                                        onLike={handleLikeToggle}/>
+                                        onLike={handleLikeToggle}
+                                        onDelete={handleDeletePost}/>
                                 )
                             })
                         }
@@ -207,20 +209,20 @@ const Feed = () => {
 
                     {/* Who to follow */}
                     <div className={styles.suggestionsCard}>
-                        <h3 className={styles.cardTitle}>Who to follow</h3>
+                        <h3 className={styles.cardTitle}>Suggested follow</h3>
 
                         <div className={styles.suggestionList}>
                             {suggestedUsers.map((u, i) => (
-                                <div key={i} className={styles.userRow}>
-                                    <div className={styles.userDetails}>
-                                        <img src={u.img} alt={u.username} className={styles.smallAvatar} />
-                                        <div className={styles.texts}>
-                                            <span className={styles.name}>{u.name}</span>
-                                            <span className={styles.username}>@{u.username}</span>
-                                        </div>
-                                    </div>
-                                    <button className={styles.followBtnSmall}>Follow</button>
-                                </div>
+
+                                <SuggestedUser
+                                    key={i}
+                                    name={u.firstName + " " + u.lastName}
+                                    username={u.username} // חשוב: מעבירים את ה-username כדי שנוכל לבנות לינק
+                                    img={u.pictureUrl ? u.pictureUrl : "https://robohash.org/" + u.username}
+                                    user_id={u.id}
+                                />
+
+
                             ))}
                         </div>
 
@@ -229,11 +231,12 @@ const Feed = () => {
 
                     {/* Footer Links */}
                     <div className={styles.footerLinks}>
-                        <a href="#" className={styles.footerLink}>About</a>
-                        <a href="#" className={styles.footerLink}>Help Center</a>
-                        <a href="#" className={styles.footerLink}>Privacy</a>
-                        <a href="#" className={styles.footerLink}>Terms</a>
-                        <span className={styles.footerLink}>© 2026 DEVSOCIAL</span>
+                        <a href="https://github.com/liorshaya" className={styles.footerLink} >LiorGit</a>
+                        <a href="https://github.com/nehoraitubul" className={styles.footerLink}>NehoraiGit</a>
+                        <a href="https://vroomspark.com" className={styles.footerLink}>Promote</a>
+                    </div>
+                    <div className={styles.footerLinks}>
+                        <span className={styles.footerLink}>© 2026 LNSTORES</span>
                     </div>
 
                 </aside>

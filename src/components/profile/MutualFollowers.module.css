@@ -1,0 +1,85 @@
+/* MutualFollowers.module.css */
+
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border-dark);
+}
+
+.title {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 0;
+}
+
+.row {
+    display: flex;
+    align-items: center;
+}
+
+.avatarGroup {
+    display: flex;
+    align-items: center;
+    margin-right: 12px;
+}
+
+/* העיצוב המשותף לעיגולים */
+.circle {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 2px solid var(--bg-surface);
+    margin-left: -7px;
+    background-color: #333;
+
+    /* === תוספת חשובה === */
+    overflow: hidden; /* מבטיח שהתמונה בפנים לא תצא מהעיגול */
+    text-decoration: none; /* שלא יהיה קו תחתון של קישור */
+    cursor: pointer;
+
+    /* למרכוז */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.circle:first-child {
+    margin-left: 0;
+}
+
+.circle:first-child { margin-left: 0; }
+.circle:nth-child(1) { z-index: 5; }
+.circle:nth-child(2) { z-index: 4; }
+.circle:nth-child(3) { z-index: 3; }
+.circle:nth-child(4) { z-index: 2; }
+
+.counter {
+    background-color: #38444d;
+    color: white;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.text {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin: 0;
+}
+
+.bold {
+    font-weight: 600;
+    color: var(--text-main);
+}
+
+.innerImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block; /* מבטל רווחים מיותרים של תמונות */
+}

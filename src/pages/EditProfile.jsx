@@ -67,7 +67,7 @@ const EditProfile = () => {
                         lastName: res.data.user.lastName,
                         city: res.data.user.city,
                         country: res.data.user.country,
-                        pictureUrl: res.data.user.pictureUrl ? res.data.user.pictureUrl : "https://robohash.org/" + res.data.user.username.charAt(0),
+                        pictureUrl: res.data.user.pictureUrl ? res.data.user.pictureUrl : "https://robohash.org/" + res.data.user.username,
                         description: res.data.user.description
                     }));
                     navigate(`/profile/${user.username}`)
