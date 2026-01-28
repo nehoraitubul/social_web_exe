@@ -9,29 +9,34 @@ import Profile from './pages/Profile';
 import EditProfile from "./pages/EditProfile.jsx";
 import {UserProvider} from "./UserProvider.jsx";
 import Feed from "./pages/Feed.jsx";
+import {ThemeProvider} from "./provider/ThemeProvider.jsx";
 
 function App() {
     return (
         <BrowserRouter>
 
-            <UserProvider>
+            <ThemeProvider>
 
-            <Navbar />
+                <UserProvider>
 
-            <main style={{}}>
+                <Navbar />
 
-                <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/register" element={<Register />} />
-                    <Route path="/profile/:username" element={<Profile />} />
-                    <Route path="/edit-profile" element={<EditProfile />} />
-                    <Route path="/feed" element={<Feed />} />
-                </Routes>
+                <main style={{}}>
 
-            </main>
+                    <Routes>
+                        <Route path="/" element={<Home />} />
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/register" element={<Register />} />
+                        <Route path="/profile/:username" element={<Profile />} />
+                        <Route path="/edit-profile" element={<EditProfile />} />
+                        <Route path="/feed" element={<Feed />} />
+                    </Routes>
 
-            </UserProvider>
+                </main>
+
+                </UserProvider>
+
+            </ThemeProvider>
 
         </BrowserRouter>
     );
