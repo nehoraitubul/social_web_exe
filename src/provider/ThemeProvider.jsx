@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ThemeContext } from './ThemeContext';
+import { ThemeContext } from "../context/ThemeContext";
 
 export const ThemeProvider = ({ children }) => {
     // טעינת הבחירה מה-LocalStorage או ברירת מחדל ל-'system'
